@@ -1,6 +1,6 @@
-ICS Game Project
+I C Chess
 ============
 
 by Andrey Khesin and Eric Ye
 
-It's going to be chess with an AI.
+A game of chess, written for ICS class.
