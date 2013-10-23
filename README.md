@@ -1,4 +1,4 @@
-I C Chess
+I See Chess
 ============
 
 by Andrey Khesin and Eric Ye
