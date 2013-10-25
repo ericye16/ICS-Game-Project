@@ -12,7 +12,7 @@ public class Knight extends Piece {
     public void move(){
         int[][] moves = {{1, 2}, {2, 1}, {2, -1}, {1, -2}, {-1, -2}, {-2, -1}, {-2, 1}, {-1, 2}};
         for(int i = 0; i < moves.length; i++){
-            if(super.getIsWhite() != ISeeChess.board[getPosition()[0] + moves[i][0]][getPosition()[1] + moves[i][1]].getIsWhite()){
+            if(ISeeChess.board[getPosition()[0] + moves[i][0]][getPosition()[1] + moves[i][1]] == null || super.getIsWhite() != ISeeChess.board[getPosition()[0] + moves[i][0]][getPosition()[1] + moves[i][1]].getIsWhite()){
                 try{
                     Piece placeholder = ISeeChess.board[getPosition()[0] + moves[i][0]][getPosition()[1] + moves[i][1]];
                     ISeeChess.board[getPosition()[0] + moves[i][0]][getPosition()[1] + moves[i][1]] = new Knight(super.getIsWhite());
