@@ -8,10 +8,10 @@
 public abstract class Piece {
     private boolean isWhite;
     private int[] position;
-    public Piece(boolean isWhite){
-        this.isWhite = isWhite;
+    public Piece(boolean white){
+        this.isWhite = white;
     }
-    public boolean getIsWhite(){
+    public boolean isWhite(){
         return isWhite;
     }
     public int[] getPosition(){

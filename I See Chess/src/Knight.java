@@ -12,18 +12,18 @@ public class Knight extends Piece {
     public void move(){
         int[][] moves = {{1, 2}, {2, 1}, {2, -1}, {1, -2}, {-1, -2}, {-2, -1}, {-2, 1}, {-1, 2}};
         for(int i = 0; i < moves.length; i++){
-            if(ISeeChess.board[getPosition()[0] + moves[i][0]][getPosition()[1] + moves[i][1]] == null || super.getIsWhite() != ISeeChess.board[getPosition()[0] + moves[i][0]][getPosition()[1] + moves[i][1]].getIsWhite()){
-                try{
+            try{
+                if(ISeeChess.board[getPosition()[0] + moves[i][0]][getPosition()[1] + moves[i][1]] == null || isWhite() != ISeeChess.board[getPosition()[0] + moves[i][0]][getPosition()[1] + moves[i][1]].isWhite()){
                     Piece placeholder = ISeeChess.board[getPosition()[0] + moves[i][0]][getPosition()[1] + moves[i][1]];
-                    ISeeChess.board[getPosition()[0] + moves[i][0]][getPosition()[1] + moves[i][1]] = new Knight(super.getIsWhite());
+                    ISeeChess.board[getPosition()[0] + moves[i][0]][getPosition()[1] + moves[i][1]] = new Knight(isWhite());
                     ISeeChess.board[getPosition()[0]][getPosition()[1]] = null;
-                    if(ISeeChess.kingSafe(super.getIsWhite())){
+                    if(ISeeChess.kingSafe(isWhite())){
                         ISeeChess.allowed(new int[] {getPosition()[0] + moves[i][0], getPosition()[1] + moves[i][1]});
                     }
                     ISeeChess.board[getPosition()[0] + moves[i][0]][getPosition()[1] + moves[i][1]] = placeholder;
-                    ISeeChess.board[getPosition()[0]][getPosition()[1]] = new Knight(super.getIsWhite());
-                }catch(ArrayIndexOutOfBoundsException e){
+                    ISeeChess.board[getPosition()[0]][getPosition()[1]] = new Knight(isWhite());
                 }
+            }catch(ArrayIndexOutOfBoundsException e){
             }
         }
     }

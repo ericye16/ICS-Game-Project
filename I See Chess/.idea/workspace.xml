@@ -4,13 +4,13 @@
     <list default="true" id="bf7e9ae6-7cb1-4dd3-bcb5-5a23adf32105" name="Default" comment="" />
     <ignored path="I See Chess.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Piece.java" changelist="bf7e9ae6-7cb1-4dd3-bcb5-5a23adf32105" time="1382738661439" ignored="false" />
+    <file path="/Piece.java" changelist="bf7e9ae6-7cb1-4dd3-bcb5-5a23adf32105" time="1382742885797" ignored="false" />
     <file path="/Rook.java" changelist="bf7e9ae6-7cb1-4dd3-bcb5-5a23adf32105" time="1382727341986" ignored="false" />
-    <file path="/Knight.java" changelist="bf7e9ae6-7cb1-4dd3-bcb5-5a23adf32105" time="1382741408182" ignored="false" />
-    <file path="/Bishop.java" changelist="bf7e9ae6-7cb1-4dd3-bcb5-5a23adf32105" time="1382727328456" ignored="false" />
-    <file path="/King.java" changelist="bf7e9ae6-7cb1-4dd3-bcb5-5a23adf32105" time="1382727353136" ignored="false" />
+    <file path="/Knight.java" changelist="bf7e9ae6-7cb1-4dd3-bcb5-5a23adf32105" time="1382744715267" ignored="false" />
+    <file path="/Bishop.java" changelist="bf7e9ae6-7cb1-4dd3-bcb5-5a23adf32105" time="1382743107687" ignored="false" />
+    <file path="/King.java" changelist="bf7e9ae6-7cb1-4dd3-bcb5-5a23adf32105" time="1382743208190" ignored="false" />
     <file path="/Queen.java" changelist="bf7e9ae6-7cb1-4dd3-bcb5-5a23adf32105" time="1382727348311" ignored="false" />
-    <file path="/Pawn.java" changelist="bf7e9ae6-7cb1-4dd3-bcb5-5a23adf32105" time="1382738581353" ignored="false" />
+    <file path="/Pawn.java" changelist="bf7e9ae6-7cb1-4dd3-bcb5-5a23adf32105" time="1382744744092" ignored="false" />
     <file path="/ISeeChess.java" changelist="bf7e9ae6-7cb1-4dd3-bcb5-5a23adf32105" time="1382726763893" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -75,7 +75,7 @@
       <file leaf-file-name="ISeeChess.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ISeeChess.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="55" selection-start="1247" selection-end="1247" vertical-scroll-proportion="0.0">
+            <state line="9" column="20" selection-start="1092" selection-end="1092" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="docComment;class#ISeeChess#0" expanded="false" />
               </folding>
@@ -86,7 +86,7 @@
       <file leaf-file-name="Piece.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Piece.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="32" selection-start="154" selection-end="154" vertical-scroll-proportion="0.0">
+            <state line="11" column="28" selection-start="303" selection-end="303" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="docComment;class#Piece#0" expanded="false" />
               </folding>
@@ -97,7 +97,7 @@
       <file leaf-file-name="Pawn.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Pawn.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="17" column="69" selection-start="934" selection-end="934" vertical-scroll-proportion="0.3418647">
+            <state line="21" column="13" selection-start="1480" selection-end="1480" vertical-scroll-proportion="0.46617916">
               <folding>
                 <element signature="docComment;class#Pawn#0" expanded="false" />
               </folding>
@@ -108,7 +108,7 @@
       <file leaf-file-name="Knight.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Knight.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="18" column="0" selection-start="925" selection-end="925" vertical-scroll-proportion="0.0">
+            <state line="24" column="13" selection-start="1405" selection-end="1405" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="docComment;class#Knight#0" expanded="false" />
               </folding>
@@ -119,7 +119,7 @@
       <file leaf-file-name="Bishop.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Bishop.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="23" selection-start="280" selection-end="280" vertical-scroll-proportion="0.0">
+            <state line="16" column="20" selection-start="676" selection-end="676" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="docComment;class#Bishop#0" expanded="false" />
               </folding>
@@ -152,7 +152,7 @@
       <file leaf-file-name="King.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/King.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="27" column="8" selection-start="1519" selection-end="1519" vertical-scroll-proportion="0.0">
+            <state line="25" column="12" selection-start="1412" selection-end="1412" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="docComment;class#King#0" expanded="false" />
               </folding>
@@ -171,14 +171,14 @@
     <option name="changedFiles">
       <list>
         <option value="$PROJECT_DIR$/src/Mechanics.java" />
-        <option value="$PROJECT_DIR$/src/Bishop.java" />
         <option value="$PROJECT_DIR$/src/Rook.java" />
         <option value="$PROJECT_DIR$/src/Queen.java" />
         <option value="$PROJECT_DIR$/src/Piece.java" />
         <option value="$PROJECT_DIR$/src/ISeeChess.java" />
+        <option value="$PROJECT_DIR$/src/King.java" />
+        <option value="$PROJECT_DIR$/src/Bishop.java" />
         <option value="$PROJECT_DIR$/src/Knight.java" />
         <option value="$PROJECT_DIR$/src/Pawn.java" />
-        <option value="$PROJECT_DIR$/src/King.java" />
       </list>
     </option>
   </component>
@@ -257,7 +257,7 @@
     <property name="GoToFile.includeJavaFiles" value="false" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="options.splitter.main.proportions" value="0.3" />
-    <property name="options.lastSelected" value="project.propVCSSupport.Mappings" />
+    <property name="options.lastSelected" value="Images" />
     <property name="recentsLimit" value="5" />
     <property name="MemberChooser.sorted" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -397,22 +397,22 @@
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23333333" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -550,20 +550,20 @@
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bishop.java">
+    <entry file="file://$PROJECT_DIR$/src/ISeeChess.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="23" selection-start="280" selection-end="280" vertical-scroll-proportion="0.0">
+        <state line="9" column="20" selection-start="1092" selection-end="1092" vertical-scroll-proportion="0.0">
           <folding>
-            <element signature="docComment;class#Bishop#0" expanded="false" />
+            <element signature="docComment;class#ISeeChess#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Rook.java">
+    <entry file="file://$PROJECT_DIR$/src/Piece.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="15" selection-start="268" selection-end="268" vertical-scroll-proportion="0.0">
+        <state line="11" column="28" selection-start="303" selection-end="303" vertical-scroll-proportion="0.0">
           <folding>
-            <element signature="docComment;class#Rook#0" expanded="false" />
+            <element signature="docComment;class#Piece#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -577,45 +577,45 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/King.java">
+    <entry file="file://$PROJECT_DIR$/src/Rook.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="8" selection-start="1519" selection-end="1519" vertical-scroll-proportion="0.0">
+        <state line="11" column="15" selection-start="268" selection-end="268" vertical-scroll-proportion="0.0">
           <folding>
-            <element signature="docComment;class#King#0" expanded="false" />
+            <element signature="docComment;class#Rook#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ISeeChess.java">
+    <entry file="file://$PROJECT_DIR$/src/Bishop.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="55" selection-start="1247" selection-end="1247" vertical-scroll-proportion="0.0">
+        <state line="16" column="20" selection-start="676" selection-end="676" vertical-scroll-proportion="0.0">
           <folding>
-            <element signature="docComment;class#ISeeChess#0" expanded="false" />
+            <element signature="docComment;class#Bishop#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Knight.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="0" selection-start="925" selection-end="925" vertical-scroll-proportion="0.0">
+        <state line="24" column="13" selection-start="1405" selection-end="1405" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="docComment;class#Knight#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Piece.java">
+    <entry file="file://$PROJECT_DIR$/src/King.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="32" selection-start="154" selection-end="154" vertical-scroll-proportion="0.0">
+        <state line="25" column="12" selection-start="1412" selection-end="1412" vertical-scroll-proportion="0.0">
           <folding>
-            <element signature="docComment;class#Piece#0" expanded="false" />
+            <element signature="docComment;class#King#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Pawn.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="69" selection-start="934" selection-end="934" vertical-scroll-proportion="0.3418647">
+        <state line="21" column="13" selection-start="1480" selection-end="1480" vertical-scroll-proportion="0.46617916">
           <folding>
             <element signature="docComment;class#Pawn#0" expanded="false" />
           </folding>
