@@ -1,4 +1,5 @@
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import java.util.ArrayList;
 /**
  * Created with IntelliJ IDEA.
  * User: eric
@@ -8,7 +9,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 public class Board {
     private Piece[][] board;
     public Board() {
-        board = new Piece[][]{
+        board = new Piece[][] {
                 {Piece.WhiteRook, Piece.WhiteKnight, Piece.WhiteBishop, Piece.WhiteQueen, Piece.WhiteKing, Piece.WhiteBishop, Piece.WhiteKnight, Piece.WhiteRook},
                 {Piece.WhitePawn, Piece.WhitePawn, Piece.WhitePawn, Piece.WhitePawn, Piece.WhitePawn, Piece.WhitePawn, Piece.WhitePawn, Piece.WhitePawn},
                 {null, null, null, null, null, null, null, null},
@@ -19,7 +20,16 @@ public class Board {
                 {Piece.BlackRook, Piece.BlackKnight, Piece.BlackBishop, Piece.BlackQueen, Piece.BlackKing, Piece.BlackBishop, Piece.BlackKnight, Piece.BlackRook}
         };
     }
-    public void movePiece(int xFrom, int yFrom, int xTo, int yTo) {
+    public ArrayList<Integer[]> allValidMoves(Piece piece, int[] location) {
+        int[][] possibleMoves = piece.getPossibleMoves();
+        for (int i = 0; i < possibleMoves.length; i++) {
+            try {
+            } catch (ArrayIndexOutOfBoundsException e) {
+            }
+        }
+        throw new NotImplementedException();
+    }
+    public void movePiece(int[] location, int[] destination) {
         throw new NotImplementedException();
     }
     public Piece[][] getBoard() {

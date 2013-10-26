@@ -5,8 +5,11 @@
  * Time: 9:11 AM
  */
 public enum Piece {
-    WhitePawn, BlackPawn, WhiteKnight, BlackKnight, WhiteBishop, BlackBishop, WhiteRook, BlackRook, WhiteQueen,
-    BlackQueen, WhiteKing, BlackKing;
+    WhitePawn, BlackPawn, WhiteKnight, BlackKnight, WhiteBishop, BlackBishop,
+    WhiteRook, BlackRook, WhiteQueen, BlackQueen, WhiteKing, BlackKing;
+    boolean isWhite() {
+        return (this == WhitePawn || this == WhiteKnight || this == WhiteBishop || this == WhiteRook || this == WhiteQueen || this == WhiteKing);
+    }
     int[][] getPossibleMoves() {
         int[][] moves = null;
         byte pawnConstant = -1;
@@ -14,7 +17,7 @@ public enum Piece {
             case WhitePawn:
                 pawnConstant = 1;
             case BlackPawn:
-                moves = new int[][] {{-1, pawnConstant}, {1, pawnConstant}, {0, pawnConstant}, {0, pawnConstant * 2}};
+                moves = new int[][] {{1, pawnConstant}, {0, pawnConstant}, {-1, pawnConstant}, {0, pawnConstant * 2}};
                 break;
             case WhiteKnight:
             case BlackKnight:
