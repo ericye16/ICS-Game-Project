@@ -1,4 +1,3 @@
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 /**
  * Created with IntelliJ IDEA.
  * User: Andrey
@@ -6,24 +5,37 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  * Time: 9:11 AM
  */
 public enum Piece {
-    Pawn,Knight,Rook,Queen,King,Bishop;
-
+    WhitePawn, BlackPawn, WhiteKnight, BlackKnight, WhiteBishop, BlackBishop, WhiteRook, BlackRook, WhiteQueen, BlackQueen, WhiteKing, BlackKing;
     int[][] getPossibleMoves() {
-        int[][] moves;
+        int[][] moves = null;
+        byte pawnConstant = -1;
         switch (this) {
-            case Pawn:
+            case WhitePawn:
+                pawnConstant = 1;
+            case BlackPawn:
+                moves = new int[][] {{-1, pawnConstant}, {1, pawnConstant}, {0, pawnConstant}, {0, pawnConstant * 2}};
                 break;
-            case Knight:
+            case WhiteKnight:
+            case BlackKnight:
+                moves = new int[][] {{1, 2}, {2, 1}, {2, -1}, {1, -2}, {-1, -2}, {-2, -1}, {-2, 1}, {-1, 2}};
                 break;
-            case Bishop:
+            case WhiteBishop:
+            case BlackBishop:
+                moves = new int[][] {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {1, -1}, {2, -2}, {3, -3}, {4, -4}, {5, -5}, {6, -6}, {7, -7}, {-1, -1}, {-2, -2}, {-3, -3}, {-4, -4}, {-5, -5}, {-6, -6}, {-7, -7}, {-1, 1}, {-2, 2}, {-3, 3}, {-4, 4}, {-5, 5}, {-6, 6}, {-7, 7}};
                 break;
-            case Rook:
+            case WhiteRook:
+            case BlackRook:
+                moves = new int[][] {{0, 1}, {0, 2}, {0, 3}, {0, 4}, {0, 5}, {0, 6}, {0, 7}, {1, 0}, {2, 0}, {3, 0}, {4, 0}, {5, 0}, {6, 0}, {7, 0}, {0, -1}, {0, -2}, {0, -3}, {0, -4}, {0, -5}, {0, -6}, {0, -7}, {-1, 0}, {-2, 0}, {-3, 0}, {-4, 0}, {-5, 0}, {-6, 0}, {-7, 0}};
                 break;
-            case Queen:
+            case WhiteQueen:
+            case BlackQueen:
+                moves = new int[][] {{0, 1}, {0, 2}, {0, 3}, {0, 4}, {0, 5}, {0, 6}, {0, 7}, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {1, 0}, {2, 0}, {3, 0}, {4, 0}, {5, 0}, {6, 0}, {7, 0}, {1, -1}, {2, -2}, {3, -3}, {4, -4}, {5, -5}, {6, -6}, {7, -7}, {0, -1}, {0, -2}, {0, -3}, {0, -4}, {0, -5}, {0, -6}, {0, -7}, {-1, -1}, {-2, -2}, {-3, -3}, {-4, -4}, {-5, -5}, {-6, -6}, {-7, -7}, {-1, 0}, {-2, 0}, {-3, 0}, {-4, 0}, {-5, 0}, {-6, 0}, {-7, 0}, {-1, 1}, {-2, 2}, {-3, 3}, {-4, 4}, {-5, 5}, {-6, 6}, {-7, 7}};
                 break;
-            case King:
+            case WhiteKing:
+            case BlackKing:
+                moves = new int[][] {{0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}, {-1, -1}, {-1, 0}, {-1, 1}};
                 break;
         }
-        throw new NotImplementedException();
+        return moves;
     }
 }
