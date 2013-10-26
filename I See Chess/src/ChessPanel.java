@@ -1,5 +1,4 @@
 import javax.swing.*;
-
 /**
  * Created with IntelliJ IDEA.
  * User: eric
