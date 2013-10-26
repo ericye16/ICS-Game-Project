@@ -6,6 +6,6 @@
  */
 public class ISeeChess {
     public static void main(String[] args){
-        Board board = new Board();
+        Board board = new Board(); //don't try this unless you want to create a black hole
     }
 }
