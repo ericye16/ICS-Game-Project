@@ -1,3 +1,5 @@
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Andrey
@@ -8,7 +10,8 @@ public enum Piece {
     WhitePawn, BlackPawn, WhiteKnight, BlackKnight, WhiteBishop, BlackBishop,
     WhiteRook, BlackRook, WhiteQueen, BlackQueen, WhiteKing, BlackKing;
     boolean isWhite() {
-        return (this == WhitePawn || this == WhiteKnight || this == WhiteBishop || this == WhiteRook || this == WhiteQueen || this == WhiteKing);
+        return (this == Piece.WhitePawn || this == WhiteKnight || this == WhiteBishop ||
+                this == WhiteRook || this == WhiteQueen || this == WhiteKing);
     }
     int[][] getPossibleMoves() {
         int[][] moves = null;
