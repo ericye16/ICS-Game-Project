@@ -50,7 +50,7 @@ public class Board {
                     case BlackKnight:
                     case WhiteKing:
                     case BlackKing:
-                        if (board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]] == null || piece.isWhite() != board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]].isWhite()){
+                        if (board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]] == null || piece.isWhite() != board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]].isWhite()) {
                             validMoves.add(possibleMoves[i]);
                         }
                         break;
@@ -60,6 +60,11 @@ public class Board {
                     case BlackRook:
                     case WhiteQueen:
                     case BlackQueen:
+                        if ((board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]] != null && piece.isWhite() == board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]].isWhite()) || (board[location[0] + possibleMoves[i - 1][0]][location[1] + possibleMoves[i - 1][1]] != null && piece.isWhite() != board[location[0] + possibleMoves[i - 1][0]][location[1] + possibleMoves[i - 1][1]].isWhite())) {
+                            i -= i % 7 + 7;
+                        } else {
+                            validMoves.add(possibleMoves[i]);
+                        }
                         break;
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
