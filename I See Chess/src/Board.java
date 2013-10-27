@@ -50,7 +50,7 @@ public class Board {
                     case BlackKnight:
                     case WhiteKing:
                     case BlackKing:
-                        if (board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]] != null && piece.isWhite() != board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]].isWhite()){
+                        if (board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]] == null || piece.isWhite() != board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]].isWhite()){
                             validMoves.add(possibleMoves[i]);
                         }
                         break;
