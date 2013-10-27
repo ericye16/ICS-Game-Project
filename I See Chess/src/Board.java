@@ -70,7 +70,7 @@ public class Board {
             } catch (ArrayIndexOutOfBoundsException e) {
             }
         }
-        throw new NotImplementedException();
+        return validMoves;
     }
     public void movePiece(int[] location, int[] destination) {
         throw new NotImplementedException();
