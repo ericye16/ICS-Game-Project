@@ -31,16 +31,16 @@ public class Board {
                         switch (i){
                             case 0:
                             case 1:
-                                if (board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]] != null && piece.isWhite() != board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]].isWhite()){
+                                if (board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]] != null && piece.isWhite() != board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]].isWhite()) {
                                     validMoves.add(possibleMoves[i]);
                                 }
                                 break;
                             case 3:
-                                if (board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]] != null){
+                                if (board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]] != null) {
                                     break;
                                 }
                             case 2:
-                                if (board[location[0] + possibleMoves[2][0]][location[1] + possibleMoves[2][1]] == null){
+                                if (board[location[0] + possibleMoves[2][0]][location[1] + possibleMoves[2][1]] == null) {
                                     validMoves.add(possibleMoves[i]);
                                 }
                                 break;
@@ -50,6 +50,9 @@ public class Board {
                     case BlackKnight:
                     case WhiteKing:
                     case BlackKing:
+                        if (board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]] != null && piece.isWhite() != board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]].isWhite()){
+                            validMoves.add(possibleMoves[i]);
+                        }
                         break;
                     case WhiteBishop:
                     case BlackBishop:
