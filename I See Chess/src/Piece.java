@@ -7,13 +7,20 @@
 public enum Piece {
     WhitePawn, BlackPawn, WhiteKnight, BlackKnight, WhiteBishop, BlackBishop,
     WhiteRook, BlackRook, WhiteQueen, BlackQueen, WhiteKing, BlackKing;
+
     boolean isWhite() {
         return (this == WhitePawn || this == WhiteKnight || this == WhiteBishop ||
                 this == WhiteRook || this == WhiteQueen || this == WhiteKing);
     }
+
+    boolean isDirectPiece() {
+        return (this == WhitePawn || this == BlackPawn || this == WhiteKnight ||
+                this == BlackKnight || this == WhiteKing || this == BlackKing);
+    }
+
     int[][] getPossibleMoves() {
         int[][] moves = null;
-        byte pawnConstant = -1;
+        int pawnConstant = -1;
         switch (this) {
             case WhitePawn:
                 pawnConstant = 1;
@@ -51,7 +58,7 @@ public enum Piece {
                 break;
             case WhiteKing:
             case BlackKing:
-                moves = new int[][] {{0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}, {-1, -1}, {-1, 0}, {-1, 1}};
+                moves = new int[][] {{0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}, {-1, -1}, {-1, 0}, {-1, 1}, {-2, 0}, {2, 0}};
                 break;
         }
         return moves;
