@@ -3,8 +3,10 @@ import java.util.ArrayList;
 public class Board {
     private Piece[][] board;
     private boolean[][] castlingFlags = {{true, true}, {true, true}};
-    private boolean[][][] enPassant = {{{false, false, false, false, false, false, false}, {false, false, false, false, false, false, false}},
-            {{false, false, false, false, false, false, false}, {false, false, false, false, false, false, false}}};
+    private boolean[][][] enPassant = {{{false, false, false, false, false, false, false},
+            {false, false, false, false, false, false, false}},
+            {{false, false, false, false, false, false, false},
+                    {false, false, false, false, false, false, false}}};
 
     public Board() {
         board = new Piece[][] {
@@ -37,9 +39,9 @@ public class Board {
                         switch (i){
                             case 0:
                             case 1:
-                                if ((placeholder != null
-                                        && colour != placeholder.isWhite()) ||
-                                        (location[1] == (colour ? 5 : 4) && ((location[0] != 7 && enPassant[colour ? 0 : 1][0][location[0]]) ||
+                                if ((placeholder != null && colour != placeholder.isWhite()) ||
+                                        (location[1] == (colour ? 5 : 4) &&
+                                                ((location[0] != 7 && enPassant[colour ? 0 : 1][0][location[0]]) ||
                                                 (location[0] != 0 && enPassant[colour ? 0 : 1][1][location[0] - 1])))) {
                                     validMoves.add(possibleMoves[i]);
                                     added = true;
@@ -63,12 +65,19 @@ public class Board {
                     case BlackKing:
                         if (placeholder == null ||
                                 colour != placeholder.isWhite() ||
-                                (i == 8 && castlingFlags[colour ? 0 : 1][0] && board[location[0] + 1][location[1]] == null &&
+                                (i == 8 && castlingFlags[colour ? 0 : 1][0] &&
+                                        board[location[0] + 1][location[1]] == null &&
                                         board[location[0] + 2][location[1]] == null &&
-                                        safe(location, colour) && safe(new int[] {location[0] + 1, location[1]}, colour) && safe(new int[] {location[0] + 2, location[1]}, colour)) ||
-                                (i == 9 && castlingFlags[colour ? 0 : 1][1] && board[location[0] - 1][location[1]] == null &&
-                                        board[location[0] - 2][location[1]] == null && board[location[0] - 3][location[1]] == null &&
-                                        safe(location, colour) && safe(new int[] {location[0] - 1, location[1]}, colour) && safe(new int[] {location[0] - 2, location[1]}, colour))) {
+                                        safe(location, colour) &&
+                                        safe(new int[] {location[0] + 1, location[1]}, colour) &&
+                                        safe(new int[] {location[0] + 2, location[1]}, colour)) ||
+                                (i == 9 && castlingFlags[colour ? 0 : 1][1] &&
+                                        board[location[0] - 1][location[1]] == null &&
+                                        board[location[0] - 2][location[1]] == null &&
+                                        board[location[0] - 3][location[1]] == null &&
+                                        safe(location, colour) &&
+                                        safe(new int[] {location[0] - 1, location[1]}, colour) &&
+                                        safe(new int[] {location[0] - 2, location[1]}, colour))) {
                             validMoves.add(possibleMoves[i]);
                             added = true;
                         }
@@ -79,10 +88,9 @@ public class Board {
                     case BlackRook:
                     case WhiteQueen:
                     case BlackQueen:
-                        if ((placeholder != null &&
-                                colour == placeholder.isWhite()) ||
-                                (board[location[0] + possibleMoves[i - 1][0]][location[1] + possibleMoves[i - 1][1]] != null &&
-                                        colour != board[location[0] + possibleMoves[i - 1][0]][location[1] + possibleMoves[i - 1][1]].isWhite())) {
+                        if ((placeholder != null && colour == placeholder.isWhite()) ||
+                            (board[location[0] + possibleMoves[i - 1][0]][location[1] + possibleMoves[i - 1][1]] != null &&
+                            colour != board[location[0] + possibleMoves[i - 1][0]][location[1] + possibleMoves[i - 1][1]].isWhite())) {
                             i -= i % 7 - 7;
                         } else {
                             validMoves.add(possibleMoves[i]);
@@ -128,19 +136,23 @@ public class Board {
                 if (threat != null && colour != threat.isWhite()) {
                     if(threat.isDirectPiece()){
                         for (int k = 0; k < (threat == Piece.WhitePawn || threat == Piece.BlackPawn ? 2 : 8); k++) {
-                            if (location.equals (new int[] {i + threat.getPossibleMoves()[k][0], j + threat.getPossibleMoves()[k][1]})) {
+                            if (location.equals(new int[]
+                                    {i + threat.getPossibleMoves()[k][0], j + threat.getPossibleMoves()[k][1]})) {
                                 isSafe = false;
                             }
                         }
                     } else {
                         int[][] spread = Piece.WhiteQueen.getPossibleMoves();
                         for (int k = 0; k < 56; k++) {
-                            if (location.equals (new int[] {i + spread[k][0], j + spread[k][1]}) && (threat == Piece.WhiteQueen || threat == Piece.BlackQueen ||
-                                    (((threat == Piece.WhiteBishop || threat == Piece.BlackBishop) && k % 14 >= 7) ||
-                                            (threat == Piece.WhiteRook || threat == Piece.BlackRook) && k % 14 < 7))) {
+                            if (location.equals (new int[] {i + spread[k][0], j + spread[k][1]}) &&
+                                    (threat == Piece.WhiteQueen || threat == Piece.BlackQueen ||
+                                            (((threat == Piece.WhiteBishop || threat == Piece.BlackBishop) && k % 14 >= 7) ||
+                                                    (threat == Piece.WhiteRook || threat == Piece.BlackRook) && k % 14 < 7))) {
                                 isSafe = false;
-                            } else if ((board[i + spread[k][0]][j + spread[k][1]] != null && colour == board[i + spread[k][0]][j + spread[k][1]].isWhite()) ||
-                                    (k % 7 != 0 && board[i + spread[k - 1][0]][j + spread[k - 1][1]] != null && colour != board[i + spread[k][0]][j + spread[k][1]].isWhite())) {
+                            } else if ((board[i + spread[k][0]][j + spread[k][1]] != null &&
+                                    colour == board[i + spread[k][0]][j + spread[k][1]].isWhite()) ||
+                                    (k % 7 != 0 && board[i + spread[k - 1][0]][j + spread[k - 1][1]] != null &&
+                                            colour != board[i + spread[k][0]][j + spread[k][1]].isWhite())) {
                                 k -= k % 7 - 7;
                             }
                         }
