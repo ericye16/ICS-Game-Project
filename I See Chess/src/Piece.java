@@ -1,9 +1,3 @@
-/**
- * Created with IntelliJ IDEA.
- * User: Andrey
- * Date: 25/10/13
- * Time: 9:11 AM
- */
 public enum Piece {
     WhitePawn, BlackPawn, WhiteKnight, BlackKnight, WhiteBishop, BlackBishop,
     WhiteRook, BlackRook, WhiteQueen, BlackQueen, WhiteKing, BlackKing;

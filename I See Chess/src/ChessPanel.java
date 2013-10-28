@@ -2,12 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-/**
- * Created with IntelliJ IDEA.
- * User: eric
- * Date: 26/10/13
- * Time: 5:32 PM
- */
 public class ChessPanel extends JPanel implements MouseListener {
     private Board board;
 
@@ -58,8 +52,8 @@ public class ChessPanel extends JPanel implements MouseListener {
     public void mouseReleased(MouseEvent mouseEvent) {}
 
     @Override
-    public void mouseEntered(MouseEvent mouseEvent) {} // we really don't care
+    public void mouseEntered(MouseEvent mouseEvent) {}
 
     @Override
-    public void mouseExited(MouseEvent mouseEvent) {} //don't care
+    public void mouseExited(MouseEvent mouseEvent) {}
 }
