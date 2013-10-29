@@ -6,9 +6,9 @@ public class Board {
     private boolean[][][] enPassant = {{{false, false, false, false, false, false, false},
             {false, false, false, false, false, false, false}},
             {{false, false, false, false, false, false, false},
-                    {false, false, false, false, false, false, false}}};
+                    {false, false, false, false, false, false, false}}}; //array representing whether one can currently en passant there are 7 ways to do this, in 2 directions, by 2 colours, array is 2 * 2 * 7
 
-    public Board() {
+    Board() {
         board = new Piece[][] {
                 {Piece.WhiteRook, Piece.WhiteKnight, Piece.WhiteBishop, Piece.WhiteQueen,
                         Piece.WhiteKing, Piece.WhiteBishop, Piece.WhiteKnight, Piece.WhiteRook},
@@ -25,37 +25,41 @@ public class Board {
         };
     }
 
-    public ArrayList<Integer[]> allValidMoves(Piece piece, int[] location) {
+    Board(Piece[][] currentBoard) {
+        board = currentBoard;
+    }
+
+    ArrayList<Integer[]> allValidMoves(Piece piece, int[] location) {
         ArrayList validMoves = new ArrayList<Integer[]>();
         boolean colour = piece.isWhite();
         int[][] possibleMoves = piece.getPossibleMoves();
         for (int i = 0; i < possibleMoves.length; i++) {
-            boolean added = false;
-            Piece placeholder = board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]];
             try {
+                boolean added = false;//flag that will be used later, represents whether the possible move has been accepted
+                Piece placeholder = board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]];//target square
                 switch (piece){
                     case WhitePawn:
                     case BlackPawn:
                         switch (i){
                             case 0:
                             case 1:
-                                if ((placeholder != null && colour != placeholder.isWhite()) ||
-                                        (location[1] == (colour ? 5 : 4) &&
-                                                ((location[0] != 7 && enPassant[colour ? 0 : 1][0][location[0]]) ||
-                                                (location[0] != 0 && enPassant[colour ? 0 : 1][1][location[0] - 1])))) {
-                                    validMoves.add(possibleMoves[i]);
-                                    added = true;
+                                if ((placeholder != null && colour != placeholder.isWhite()) ||//allows if attacker wants to capture enemy piece
+                                        (i == 0 && location[1] == (colour ? 4 : 3) &&
+                                                ((location[0] != 7 && enPassant[colour ? 0 : 1][0][location[0]]) ||//en passant right
+                                                (i == 1 && location[0] != 0 && enPassant[colour ? 0 : 1][1][location[0] - 1])))) {//en passant left
+                                    validMoves.add(possibleMoves[i]);//validate
+                                    added = true;//flag
                                 }
                                 break;
                             case 3:
-                                if (placeholder != null) {
+                                if (placeholder != null && location[1] == (colour ?  1 : 6)) {//checks 2 squares ahead is empty, if it is, it will move on to check one square ahead
                                     break;
                                 }
                             case 2:
-                                if (board[location[0] + possibleMoves[2][0]][location[1] + possibleMoves[2][1]] == null) {
+                                if (board[location[0] + possibleMoves[2][0]][location[1] + possibleMoves[2][1]] == null) {//checks 1 square ahead is empty
                                     validMoves.add(possibleMoves[i]);
-                                    added = true;
-                                }
+                                    added = true;//validate
+                                }//flag
                                 break;
                         }
                         break;
@@ -64,22 +68,22 @@ public class Board {
                     case WhiteKing:
                     case BlackKing:
                         if (placeholder == null ||
-                                colour != placeholder.isWhite() ||
-                                (i == 8 && castlingFlags[colour ? 0 : 1][0] &&
+                                colour != placeholder.isWhite() ||//allows if attacker wants to capture enemy piece
+                                (i == 8 && castlingFlags[colour ? 0 : 1][0] &&//all conditions for castling: squares are empty, king and rook haven't moved yet (flags), king not moving out of, into, or through check, right
                                         board[location[0] + 1][location[1]] == null &&
                                         board[location[0] + 2][location[1]] == null &&
                                         safe(location, colour) &&
                                         safe(new int[] {location[0] + 1, location[1]}, colour) &&
                                         safe(new int[] {location[0] + 2, location[1]}, colour)) ||
-                                (i == 9 && castlingFlags[colour ? 0 : 1][1] &&
+                                (i == 9 && castlingFlags[colour ? 0 : 1][1] &&//all conditions for castling: squares are empty, king and rook haven't moved yet (flags), king not moving out of, into, or through check, left
                                         board[location[0] - 1][location[1]] == null &&
                                         board[location[0] - 2][location[1]] == null &&
                                         board[location[0] - 3][location[1]] == null &&
                                         safe(location, colour) &&
                                         safe(new int[] {location[0] - 1, location[1]}, colour) &&
                                         safe(new int[] {location[0] - 2, location[1]}, colour))) {
-                            validMoves.add(possibleMoves[i]);
-                            added = true;
+                            validMoves.add(possibleMoves[i]);//validate
+                            added = true;//flag
                         }
                         break;
                     case WhiteBishop:
@@ -88,20 +92,20 @@ public class Board {
                     case BlackRook:
                     case WhiteQueen:
                     case BlackQueen:
-                        if ((placeholder != null && colour == placeholder.isWhite()) ||
+                        if ((placeholder != null && colour == placeholder.isWhite()) ||//sees friendly piece, blocked
                             (board[location[0] + possibleMoves[i - 1][0]][location[1] + possibleMoves[i - 1][1]] != null &&
-                            colour != board[location[0] + possibleMoves[i - 1][0]][location[1] + possibleMoves[i - 1][1]].isWhite())) {
-                            i -= i % 7 - 7;
-                        } else {
-                            validMoves.add(possibleMoves[i]);
-                            added = true;
+                            colour != board[location[0] + possibleMoves[i - 1][0]][location[1] + possibleMoves[i - 1][1]].isWhite())) {//saw enemy piece one tile ago, this tile blocked
+                            i -= i % 7 - 7;//adjust counter to next direction if has encountered one of the above
+                        } else {//move allowed
+                            validMoves.add(possibleMoves[i]);//validate
+                            added = true;//flag
                         }
                         break;
                 }
-                board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]] = piece;
-                board[location[0]][location[1]] = null;
-                if (!safe(findKing(piece.isWhite()), piece.isWhite()) && added) {
-                    validMoves.remove(validMoves.size() - 1);
+                board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]] = piece;//simulates moving piece, puts piece on target
+                board[location[0]][location[1]] = null;//empties square that piece was on
+                if (!safe(findKing(piece.isWhite()), piece.isWhite()) && added) {//checks that the king is safe
+                    validMoves.remove(validMoves.size() - 1);//if king wasn't safe and the flag was raised (the move was validated) it removes it
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
             }
@@ -124,36 +128,43 @@ public class Board {
         return board;
     }
 
-    public void movePiece(int[] location, int[] destination) {
+    void movePiece(int[] location, int[] destination) {
         throw new NotImplementedException();
     }
 
-    public boolean safe(int[] location, boolean colour){
+    boolean safe(int[] location, boolean colour){
         boolean isSafe = true;
         for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                Piece threat = board[i][j];
-                if (threat != null && colour != threat.isWhite()) {
-                    if(threat.isDirectPiece()){
-                        for (int k = 0; k < (threat == Piece.WhitePawn || threat == Piece.BlackPawn ? 2 : 8); k++) {
-                            if (location.equals(new int[]
-                                    {i + threat.getPossibleMoves()[k][0], j + threat.getPossibleMoves()[k][1]})) {
-                                isSafe = false;
+            for (int j = 0; j < 8; j++) {//cycles through board looking for attackers
+                Piece threat = board[i][j];//potential attacker
+                if (threat != null && colour != threat.isWhite()) {//attacker is of the opposite colour
+                    if((threat == Piece.WhitePawn || threat == Piece.BlackPawn || threat == Piece.WhiteKnight ||
+                            threat == Piece.BlackKnight || threat == Piece.WhiteKing || threat == Piece.BlackKing)){//piece moves to specific squares
+                        for (int k = 0; k < (threat == Piece.WhitePawn || threat == Piece.BlackPawn ? 2 : 8); k++) {//searches through target squares of attacker
+                            try {
+                                if (location.equals (new int[]//if you are being attacker
+                                        {i + threat.getPossibleMoves()[k][0], j + threat.getPossibleMoves()[k][1]})) {
+                                    isSafe = false;//you are not safe
+                                }
+                            } catch (ArrayIndexOutOfBoundsException e) {
                             }
                         }
-                    } else {
-                        int[][] spread = Piece.WhiteQueen.getPossibleMoves();
-                        for (int k = 0; k < 56; k++) {
-                            if (location.equals (new int[] {i + spread[k][0], j + spread[k][1]}) &&
-                                    (threat == Piece.WhiteQueen || threat == Piece.BlackQueen ||
-                                            (((threat == Piece.WhiteBishop || threat == Piece.BlackBishop) && k % 14 >= 7) ||
-                                                    (threat == Piece.WhiteRook || threat == Piece.BlackRook) && k % 14 < 7))) {
-                                isSafe = false;
-                            } else if ((board[i + spread[k][0]][j + spread[k][1]] != null &&
-                                    colour == board[i + spread[k][0]][j + spread[k][1]].isWhite()) ||
-                                    (k % 7 != 0 && board[i + spread[k - 1][0]][j + spread[k - 1][1]] != null &&
-                                            colour != board[i + spread[k][0]][j + spread[k][1]].isWhite())) {
-                                k -= k % 7 - 7;
+                    } else {//piece moves "infinitely"
+                        int[][] spread = Piece.WhiteQueen.getPossibleMoves();//spread represents the 8 pointed "sun" radiating from one point in 8 directions (4 cardinal, 4 diagonal) for 7 squares as that is the max distance you can travel on a chessboard
+                        for (int k = 0; k < spread.length; k++) {//cycles through all possible squares of attacker
+                            try {
+                                if (location.equals (new int[] {i + spread[k][0], j + spread[k][1]}) &&//if the attacker has a direct line to you AND is a queen OR
+                                        (threat == Piece.WhiteQueen || threat == Piece.BlackQueen ||
+                                                (((threat == Piece.WhiteBishop || threat == Piece.BlackBishop) && k % 14 >= 7) ||//is a bishop AND we are checking a diagonal OR
+                                                        (threat == Piece.WhiteRook || threat == Piece.BlackRook) && k % 14 < 7))) {//is a rook AND we are checking a cardinal direction
+                                    isSafe = false;//you are not safe
+                                } else if ((board[i + spread[k][0]][j + spread[k][1]] != null &&
+                                        colour == board[i + spread[k][0]][j + spread[k][1]].isWhite()) ||//this else if is to prevent a queen from seeing you if there is something in the middle, if its looking at a square occupied by a piece friendly to the attacker OR
+                                        (k % 7 != 0 && board[i + spread[k - 1][0]][j + spread[k - 1][1]] != null &&
+                                                colour != board[i + spread[k][0]][j + spread[k][1]].isWhite())) {//the "previous" square was occupied by an opposing piece
+                                    k -= k % 7 - 7;//jump ahead to next of 8 directions
+                                }
+                            } catch (ArrayIndexOutOfBoundsException e) {
                             }
                         }
                     }
