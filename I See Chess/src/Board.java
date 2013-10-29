@@ -128,8 +128,12 @@ public class Board {
         return board;
     }
 
-    void movePiece(int[] location, int[] destination) {
+    Piece movePiece(int[] location, int[] destination) {
+        Piece capturee = board[destination[0]][destination[1]];
+        board[destination[0]][destination[1]] = board[location[0]][location[1]];
+        board[location[0]][location[1]] = null;
         throw new NotImplementedException();
+        //return capturee;
     }
 
     boolean safe(int[] location, boolean colour){
