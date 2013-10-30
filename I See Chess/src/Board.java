@@ -1,12 +1,16 @@
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.util.ArrayList;
-public class Board {
+public class Board implements Cloneable{
     private Piece[][] board;
     private boolean[][] castlingFlags = {{true, true}, {true, true}};
     private boolean[][][] enPassant = {{{false, false, false, false, false, false, false},
             {false, false, false, false, false, false, false}},
             {{false, false, false, false, false, false, false},
                     {false, false, false, false, false, false, false}}}; //array representing whether one can currently en passant there are 7 ways to do this, in 2 directions, by 2 colours, array is 2 * 2 * 7
+
+    private ArrayList<Board> history = new ArrayList<Board>();
+    private int turn = 0;
+    private boolean isWhitesTurn = true;
 
     Board() {
         board = new Piece[][] {
@@ -113,6 +117,17 @@ public class Board {
         return validMoves;
     }
 
+    @Override
+    protected Object clone() {
+        Board toReturn = new Board(this.board);
+        toReturn.turn = turn;
+        toReturn.castlingFlags = castlingFlags.clone();
+        toReturn.enPassant = enPassant.clone();
+        toReturn.history = (ArrayList<Board>) history.clone();
+        toReturn.isWhitesTurn = isWhitesTurn;
+        toReturn.turn = turn;
+        return toReturn;
+    }
     int[] findKing(boolean colour) {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
@@ -130,10 +145,26 @@ public class Board {
 
     Piece movePiece(int[] location, int[] destination) {
         Piece capturee = board[destination[0]][destination[1]];
-        board[destination[0]][destination[1]] = board[location[0]][location[1]];
-        board[location[0]][location[1]] = null;
-        throw new NotImplementedException();
-        //return capturee;
+        Piece capturerer = board[location[0]][location[1]];
+        boolean wasAValidMove = false;
+
+        ArrayList<Integer[]> valMoves= allValidMoves(capturerer, location);
+        for (Integer[] possibleDest: valMoves) {
+            if (possibleDest[0] == destination[0] && possibleDest[1] == destination[1]) {
+                wasAValidMove = true;
+            }
+        }
+        if (wasAValidMove) {
+            Board prevBoard = (Board) this.clone();
+            board[destination[0]][destination[1]] = board[location[0]][location[1]];
+            board[location[0]][location[1]] = null;
+            history.add(prevBoard);
+            turn++;
+        } else {
+            throw new IllegalArgumentException();
+        }
+
+        return capturee;
     }
 
     boolean safe(int[] location, boolean colour){
