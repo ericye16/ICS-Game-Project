@@ -18,6 +18,7 @@ public enum Piece {
     BlackKing("img/KingBlack.png");
 
     BufferedImage image;
+
     boolean isWhite() {
         return (this == WhitePawn || this == WhiteKnight || this == WhiteBishop ||
                 this == WhiteRook || this == WhiteQueen || this == WhiteKing);

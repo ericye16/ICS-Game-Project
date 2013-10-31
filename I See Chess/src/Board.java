@@ -1,16 +1,15 @@
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.util.ArrayList;
 public class Board implements Cloneable{
     private Piece[][] board;
+    private ArrayList<Board> history = new ArrayList<Board>();
+    private boolean isWhitesTurn, whiteCheck, blackCheck, whiteStalemate, blackStalemate, fiftyMoves, threeBoards, stalemate, whiteMate, blackMate;
     private boolean[][] castlingFlags = {{true, true}, {true, true}};
     private boolean[][][] enPassant = {{{false, false, false, false, false, false, false},
             {false, false, false, false, false, false, false}},
             {{false, false, false, false, false, false, false},
                     {false, false, false, false, false, false, false}}}; //array representing whether one can currently en passant there are 7 ways to do this, in 2 directions, by 2 colours, array is 2 * 2 * 7
-
-    private ArrayList<Board> history = new ArrayList<Board>();
     private int turn = 0;
-    private boolean isWhitesTurn = true;
+    private int[] whiteKingLocation, blackKingLocation;
 
     Board() {
         board = new Piece[][] {
@@ -27,10 +26,20 @@ public class Board implements Cloneable{
                 {Piece.BlackRook, Piece.BlackKnight, Piece.BlackBishop, Piece.BlackQueen,
                         Piece.BlackKing, Piece.BlackBishop, Piece.BlackKnight, Piece.BlackRook}
         };
+        isWhitesTurn = true;
     }
 
     Board(Piece[][] currentBoard) {
         board = currentBoard;
+        whiteCheck = false;
+        blackCheck = false;
+        whiteStalemate = false;
+        blackStalemate = false;
+        fiftyMoves = false;
+        threeBoards = false;
+        stalemate = false;
+        whiteMate = false;
+        blackMate = false;
     }
 
     ArrayList<Integer[]> allValidMoves(Piece piece, int[] location) {
@@ -117,6 +126,46 @@ public class Board implements Cloneable{
         return validMoves;
     }
 
+    void checkConditions() {
+        whiteStalemate = true;
+        blackStalemate = true;
+        if (safe(findKing(true), true)) {
+            whiteCheck = true;
+            whiteMate = true;
+        }
+        if (safe(findKing(false), false)) {
+            blackCheck = true;
+            blackMate = true;
+        }
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                if (board[i][j] != null && board[i][j].isWhite() && allValidMoves(board[i][j], new int[] {i, j}).size() != 0) {
+                    whiteStalemate = false;
+                    whiteMate = false;
+                }
+                if (board[i][j] != null && !board[i][j].isWhite() && allValidMoves(board[i][j], new int[] {i, j}).size() != 0) {
+                    blackStalemate = false;
+                    blackMate = false;
+                }
+            }
+        }
+        if (history.size() >= 100) {
+            fiftyMoves = true;
+        }
+        for (Board boardOne : history) {
+            for (Board boardTwo : history) {
+                for (Board boardThree : history) {
+                    if (boardOne != boardTwo && boardOne != boardThree && boardTwo != boardThree && boardOne.equals(boardTwo) && boardOne.equals(boardThree) && boardTwo.equals(boardThree)) {
+                        threeBoards = true;
+                    }
+                }
+            }
+        }
+        if (whiteStalemate || blackStalemate || fiftyMoves || threeBoards) {
+            stalemate = true;
+        }
+    }
+
     @Override
     protected Object clone() {
         Board toReturn = new Board(this.board);
@@ -128,15 +177,9 @@ public class Board implements Cloneable{
         toReturn.turn = turn;
         return toReturn;
     }
+
     int[] findKing(boolean colour) {
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board.length; j++) {
-                if (board[i][j] == (colour ? Piece.WhiteKing : Piece.BlackKing)) {
-                    return new int[] {i, j};
-                }
-            }
-        }
-        return null;
+        return colour ? whiteKingLocation : blackKingLocation;
     }
 
     public Piece[][] getBoard() {
@@ -144,23 +187,28 @@ public class Board implements Cloneable{
     }
 
     Piece movePiece(int[] location, int[] destination) {
-        Piece capturee = board[destination[0]][destination[1]];
         Piece capturerer = board[location[0]][location[1]];
+        Piece capturee = board[destination[0]][destination[1]];
         boolean wasAValidMove = false;
 
-        ArrayList<Integer[]> valMoves= allValidMoves(capturerer, location);
-        for (Integer[] possibleDest: valMoves) {
-            if (possibleDest[0] == destination[0] && possibleDest[1] == destination[1]) {
+        ArrayList<Integer[]> validMoves = allValidMoves(capturerer, location);
+        for (Integer[] possibleDestination : validMoves) {
+            if (possibleDestination[0] == destination[0] && possibleDestination[1] == destination[1]) {
                 wasAValidMove = true;
             }
         }
         if (wasAValidMove) {
             Board prevBoard = (Board) this.clone();
-            board[destination[0]][destination[1]] = board[location[0]][location[1]];
+            board[destination[0]][destination[1]] = capturerer;
             board[location[0]][location[1]] = null;
             history.add(prevBoard);
             isWhitesTurn = !isWhitesTurn;
             turn++;
+            if (capturerer == Piece.WhiteKing) {
+                whiteKingLocation = new int[] {destination[0], destination[1]};
+            } else if (capturerer == Piece.BlackKing) {
+                blackKingLocation = new int[] {destination[0], destination[1]};
+            }
         } else {
             throw new IllegalArgumentException();
         }
@@ -170,8 +218,8 @@ public class Board implements Cloneable{
 
     boolean safe(int[] location, boolean colour){
         boolean isSafe = true;
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {//cycles through board looking for attackers
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {//cycles through board looking for attackers
                 Piece threat = board[i][j];//potential attacker
                 if (threat != null && colour != threat.isWhite()) {//attacker is of the opposite colour
                     if((threat == Piece.WhitePawn || threat == Piece.BlackPawn || threat == Piece.WhiteKnight ||
