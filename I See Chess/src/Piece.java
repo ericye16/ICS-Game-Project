@@ -1,7 +1,23 @@
-public enum Piece {
-    WhitePawn, BlackPawn, WhiteKnight, BlackKnight, WhiteBishop, BlackBishop,
-    WhiteRook, BlackRook, WhiteQueen, BlackQueen, WhiteKing, BlackKing;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+public enum Piece {
+    WhitePawn("img/PawnWhite.png"),
+    BlackPawn("img/PawnBlack.png"),
+    WhiteKnight("img/KnightWhite.png"),
+    BlackKnight("img/KnightBlack.png"),
+    WhiteBishop("img/BishopWhite.png"),
+    BlackBishop("img/BishopBlack.png"),
+    WhiteRook("img/RookWhite.png"),
+    BlackRook("img/RookBlack.png"),
+    WhiteQueen("img/QueenWhite.png"),
+    BlackQueen("img/QueenBlack.png"),
+    WhiteKing("img/KingWhite.png"),
+    BlackKing("img/KingBlack.png");
+
+    BufferedImage image;
     boolean isWhite() {
         return (this == WhitePawn || this == WhiteKnight || this == WhiteBishop ||
                 this == WhiteRook || this == WhiteQueen || this == WhiteKing);
@@ -10,6 +26,14 @@ public enum Piece {
     boolean isDirectPiece() {
         return (this == WhitePawn || this == BlackPawn || this == WhiteKnight ||
                 this == BlackKnight || this == WhiteKing || this == BlackKing);
+    }
+
+    Piece(String imageName) {
+        try {
+            image = ImageIO.read(new File(imageName));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     int[][] getPossibleMoves() {

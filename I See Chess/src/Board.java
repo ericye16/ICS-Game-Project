@@ -159,6 +159,7 @@ public class Board implements Cloneable{
             board[destination[0]][destination[1]] = board[location[0]][location[1]];
             board[location[0]][location[1]] = null;
             history.add(prevBoard);
+            isWhitesTurn = !isWhitesTurn;
             turn++;
         } else {
             throw new IllegalArgumentException();
@@ -207,5 +208,12 @@ public class Board implements Cloneable{
             }
         }
         return isSafe;
+    }
+    public int getTurn() {
+        return turn;
+    }
+
+    public boolean getIsWhitesTurn() {
+        return isWhitesTurn;
     }
 }
