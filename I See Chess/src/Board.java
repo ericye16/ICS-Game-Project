@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Board implements Cloneable{
     private Piece[][] board;
     private ArrayList<Board> history = new ArrayList<Board>();
@@ -176,6 +178,11 @@ public class Board implements Cloneable{
         toReturn.isWhitesTurn = isWhitesTurn;
         toReturn.turn = turn;
         return toReturn;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return Arrays.deepEquals(board, ((Board) other).board);
     }
 
     int[] findKing(boolean colour) {
