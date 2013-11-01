@@ -206,6 +206,7 @@ public class Board implements Cloneable{
         }
         if (wasAValidMove) {
             Board prevBoard = (Board) this.clone();
+            prevBoard.history = null; // to remove the amount of memory required
             board[destination[0]][destination[1]] = capturerer;
             board[location[0]][location[1]] = null;
             history.add(prevBoard);
