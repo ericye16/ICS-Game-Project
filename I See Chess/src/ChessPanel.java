@@ -1,8 +1,10 @@
 import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
+import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-public class ChessPanel extends JPanel implements MouseListener {
+public class ChessPanel extends JPanel implements MouseInputListener {
     private Board board;
 
     public ChessPanel(Board board) {
@@ -79,7 +81,13 @@ public class ChessPanel extends JPanel implements MouseListener {
     }
 
     @Override
-    public void mouseClicked(MouseEvent mouseEvent) {}
+    public void mouseClicked(MouseEvent mouseEvent) {
+        int x = mouseEvent.getX();
+        int y = mouseEvent.getY();
+        x /= differenceX();
+        y /= differenceY();
+
+    }
 
     @Override
     public void mousePressed(MouseEvent mouseEvent) {}
@@ -92,4 +100,10 @@ public class ChessPanel extends JPanel implements MouseListener {
 
     @Override
     public void mouseExited(MouseEvent mouseEvent) {}
+
+    @Override
+    public void mouseDragged(MouseEvent mouseEvent) {}
+
+    @Override
+    public void mouseMoved(MouseEvent mouseEvent) {}
 }
