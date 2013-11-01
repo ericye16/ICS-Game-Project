@@ -214,8 +214,24 @@ public class Board implements Cloneable{
             turn++;
             if (capturerer == Piece.WhiteKing) {
                 whiteKingLocation = new int[] {destination[0], destination[1]};
+                castlingFlags[0][0] = false;
+                castlingFlags[0][1] = false;
             } else if (capturerer == Piece.BlackKing) {
                 blackKingLocation = new int[] {destination[0], destination[1]};
+                castlingFlags[1][0] = false;
+                castlingFlags[1][1] = false;
+            }
+            if (board[0][0] != Piece.WhiteRook) {
+                castlingFlags[0][0] = false;
+            }
+            if (board[0][7] != Piece.WhiteRook) {
+                castlingFlags[0][1] = false;
+            }
+            if (board[7][0] != Piece.BlackRook) {
+                castlingFlags[1][0] = false;
+            }
+            if (board[7][7] != Piece.BlackRook) {
+                castlingFlags[1][1] = false;
             }
         } else {
             throw new IllegalArgumentException();
