@@ -1,3 +1,4 @@
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -194,9 +195,8 @@ public class Board implements Cloneable{
     }
 
     Piece movePiece(int[] location, int[] destination) {
-        Piece capturerer = board[location[0]][location[1]];
-        Piece capturee = board[destination[0]][destination[1]];
         boolean wasAValidMove = false;
+        Piece capturerer = board[location[0]][location[1]];
 
         ArrayList<Integer[]> validMoves = allValidMoves(capturerer, location);
         for (Integer[] possibleDestination : validMoves) {
@@ -205,6 +205,11 @@ public class Board implements Cloneable{
             }
         }
         if (wasAValidMove) {
+            Piece capturee = board[destination[0]][destination[1]];
+            if ((capturerer == Piece.WhitePawn || capturerer == Piece.BlackPawn) && capturee == null && location[0] != destination[0] && location[1] != destination[1]) {
+                capturee = (capturerer.isWhite() ? Piece.BlackPawn : Piece.WhitePawn);
+                board[destination[0]][location[1] + 2 * (destination[1] - location[1])] = null;
+            }
             Board prevBoard = (Board) this.clone();
             prevBoard.history = null; // to remove the amount of memory required
             board[destination[0]][destination[1]] = capturerer;
@@ -221,23 +226,34 @@ public class Board implements Cloneable{
                 castlingFlags[1][0] = false;
                 castlingFlags[1][1] = false;
             }
-            if (board[0][0] != Piece.WhiteRook) {
-                castlingFlags[0][0] = false;
+            for (int i = 0; i < castlingFlags.length; i++) {
+                for (int j = 0; j < castlingFlags.length; j++) {
+                    if (board[i * 7][j * 7] == (i == 0 ? Piece.WhiteRook : Piece.BlackRook)) {
+                        castlingFlags[i][j] = false;
+                    }
+                }
             }
-            if (board[0][7] != Piece.WhiteRook) {
-                castlingFlags[0][1] = false;
+            for (int i = 0; i < enPassant.length; i++) {
+                for (int j = 0; j < enPassant.length; j++) {
+                    for (int k = 0; k < 7; k++) {
+                        enPassant[i][j][k] = false;
+                    }
+                }
             }
-            if (board[7][0] != Piece.BlackRook) {
-                castlingFlags[1][0] = false;
+            if ((capturerer == Piece.WhitePawn || capturerer == Piece.BlackPawn) && location[1] == (capturerer.isWhite() ? 1 : 6) && destination[1] == (capturerer.isWhite() ? 3 : 4)) {
+                if (location [0] != 7 && board[location[0] + 1][destination[1]] == (capturerer.isWhite() ? Piece.BlackPawn : Piece.WhitePawn)) {
+                    enPassant[capturerer.isWhite() ? 1 : 0][0][location[0]] = true;
+                }
+                if (location [0] != 0 && board[location[0] - 1][destination[1]] == (capturerer.isWhite() ? Piece.BlackPawn : Piece.WhitePawn)) {
+                    enPassant[capturerer.isWhite() ? 1 : 0][0][location[0] - 1] = true;
+                }
             }
-            if (board[7][7] != Piece.BlackRook) {
-                castlingFlags[1][1] = false;
-            }
+            checkConditions();
+            throw new NotImplementedException();
+            //return capturee;
         } else {
             throw new IllegalArgumentException();
         }
-
-        return capturee;
     }
 
     boolean safe(int[] location, boolean colour){
