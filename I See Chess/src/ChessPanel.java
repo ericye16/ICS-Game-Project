@@ -6,12 +6,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 public class ChessPanel extends JPanel implements MouseInputListener {
     private Board board;
+    private DebugPanel debugPanel;
 
     public ChessPanel(Board board) {
         setOpaque(true);
         setBorder(BorderFactory.createLineBorder(Color.BLACK));
         this.board = board;
         addMouseListener(this);
+        addMouseMotionListener(this);
     }
 
     @Override
@@ -80,13 +82,19 @@ public class ChessPanel extends JPanel implements MouseInputListener {
         return board;
     }
 
+    public void setDebugPanel(DebugPanel debugPanel) {
+        this.debugPanel = debugPanel;
+    }
+
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
         int x = mouseEvent.getX();
         int y = mouseEvent.getY();
         x /= differenceX();
         y /= differenceY();
-
+        if (debugPanel != null) {
+            debugPanel.updateClickLabel(x,y);
+        }
     }
 
     @Override
@@ -105,5 +113,11 @@ public class ChessPanel extends JPanel implements MouseInputListener {
     public void mouseDragged(MouseEvent mouseEvent) {}
 
     @Override
-    public void mouseMoved(MouseEvent mouseEvent) {}
+    public void mouseMoved(MouseEvent mouseEvent) {
+        int x = mouseEvent.getX();
+        int y = mouseEvent.getY();
+        if (debugPanel != null) {
+            debugPanel.updateMotionLabel(x, y);
+        }
+    }
 }
