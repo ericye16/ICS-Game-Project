@@ -7,8 +7,11 @@ import java.awt.event.MouseListener;
 public class ChessPanel extends JPanel implements MouseInputListener {
     private Board board;
     private DebugPanel debugPanel;
+    private Piece selectedPiece = null;
+    private int[] selectedLocation = new int[2];
 
     public ChessPanel(Board board) {
+        assert (board != null);
         setOpaque(true);
         setBorder(BorderFactory.createLineBorder(Color.BLACK));
         this.board = board;
@@ -94,6 +97,33 @@ public class ChessPanel extends JPanel implements MouseInputListener {
         y /= differenceY();
         if (debugPanel != null) {
             debugPanel.updateClickLabel(x,y);
+        }
+
+        Piece pieceClicked = board.getBoard()[7-y][x];
+        if (debugPanel != null) {
+            debugPanel.updateClickedPieceLabel(pieceClicked);
+        }
+
+        //if no piece was selected and we click on a piece, select it
+        if (selectedPiece == null && pieceClicked != null) {
+            selectedPiece = pieceClicked;
+            selectedLocation[0] = x;
+            selectedLocation[1] = y;
+        }
+        //if a piece was selected and we click on a different piece, select it
+        else if (selectedPiece != null && //both aren't null
+                (x != selectedLocation[0] || y != selectedLocation[1])) { //but they're in different locations
+            selectedPiece = pieceClicked;
+            selectedLocation[0] = x;
+            selectedLocation[1] = y;
+        }
+        //otherwise if the piece we selected before was the piece clicked on, unselect it
+        else if (selectedPiece == pieceClicked && x == selectedLocation[0] && y == selectedLocation[1]) {
+            selectedPiece = null;
+        }
+
+        if (debugPanel != null) {
+            debugPanel.updateSelectedPieceLabel(selectedPiece);
         }
     }
 
