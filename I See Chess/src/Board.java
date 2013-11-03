@@ -266,7 +266,7 @@ public class Board implements Cloneable{
                             threat == Piece.BlackKnight || threat == Piece.WhiteKing || threat == Piece.BlackKing)){//piece moves to specific squares
                         for (int k = 0; k < (threat == Piece.WhitePawn || threat == Piece.BlackPawn ? 2 : 8); k++) {//searches through target squares of attacker
                             try {
-                                if (Arrays.equals(location, new int[]//if you are being attacker
+                                if (Arrays.equals(location, new int[]//if you are being attacked
                                         {i + threat.getPossibleMoves()[k][0], j + threat.getPossibleMoves()[k][1]})) {
                                     isSafe = false;//you are not safe
                                 }
@@ -283,9 +283,9 @@ public class Board implements Cloneable{
                                                         (threat == Piece.WhiteRook || threat == Piece.BlackRook) && k % 14 < 7))) {//is a rook AND we are checking a cardinal direction
                                     isSafe = false;//you are not safe
                                 } else if ((board[i + spread[k][0]][j + spread[k][1]] != null &&
-                                        colour == board[i + spread[k][0]][j + spread[k][1]].isWhite()) ||//this else if is to prevent a queen from seeing you if there is something in the middle, if its looking at a square occupied by a piece friendly to the attacker OR
+                                        colour != board[i + spread[k][0]][j + spread[k][1]].isWhite()) ||//this else if is to prevent a queen from seeing you if there is something in the middle, if its looking at a square occupied by a piece friendly to the attacker OR
                                         (k % 7 != 0 && board[i + spread[k - 1][0]][j + spread[k - 1][1]] != null &&
-                                                colour != board[i + spread[k][0]][j + spread[k][1]].isWhite())) {//the "previous" square was occupied by an opposing piece
+                                                colour == board[i + spread[k - 1][0]][j + spread[k - 1][1]].isWhite())) {//the "previous" square was occupied by an opposing piece
                                     k -= k % 7 - 7;//jump ahead to next of 8 directions
                                 }
                             } catch (ArrayIndexOutOfBoundsException e) {
