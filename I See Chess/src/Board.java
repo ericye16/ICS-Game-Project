@@ -266,7 +266,7 @@ public class Board implements Cloneable{
                             threat == Piece.BlackKnight || threat == Piece.WhiteKing || threat == Piece.BlackKing)){//piece moves to specific squares
                         for (int k = 0; k < (threat == Piece.WhitePawn || threat == Piece.BlackPawn ? 2 : 8); k++) {//searches through target squares of attacker
                             try {
-                                if (location.equals (new int[]//if you are being attacker
+                                if (Arrays.equals(location, new int[]//if you are being attacker
                                         {i + threat.getPossibleMoves()[k][0], j + threat.getPossibleMoves()[k][1]})) {
                                     isSafe = false;//you are not safe
                                 }
@@ -277,7 +277,7 @@ public class Board implements Cloneable{
                         int[][] spread = Piece.WhiteQueen.getPossibleMoves();//spread represents the 8 pointed "sun" radiating from one point in 8 directions (4 cardinal, 4 diagonal) for 7 squares as that is the max distance you can travel on a chessboard
                         for (int k = 0; k < spread.length; k++) {//cycles through all possible squares of attacker
                             try {
-                                if (location.equals (new int[] {i + spread[k][0], j + spread[k][1]}) &&//if the attacker has a direct line to you AND is a queen OR
+                                if (Arrays.equals(location, new int[]{i + spread[k][0], j + spread[k][1]}) &&//if the attacker has a direct line to you AND is a queen OR
                                         (threat == Piece.WhiteQueen || threat == Piece.BlackQueen ||
                                                 (((threat == Piece.WhiteBishop || threat == Piece.BlackBishop) && k % 14 >= 7) ||//is a bishop AND we are checking a diagonal OR
                                                         (threat == Piece.WhiteRook || threat == Piece.BlackRook) && k % 14 < 7))) {//is a rook AND we are checking a cardinal direction

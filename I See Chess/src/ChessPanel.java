@@ -4,6 +4,8 @@ import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+
 public class ChessPanel extends JPanel implements MouseInputListener {
     private Board board;
     private DebugPanel debugPanel;
@@ -81,6 +83,10 @@ public class ChessPanel extends JPanel implements MouseInputListener {
         return getHeight() / 8;
     }
 
+    private int[] convertPanelToBoard(int x, int y) {
+        return new int[] {7 - y, x};
+    }
+
     public Board getBoard() {
         return board;
     }
@@ -95,23 +101,25 @@ public class ChessPanel extends JPanel implements MouseInputListener {
         int y = mouseEvent.getY();
         x /= differenceX();
         y /= differenceY();
+        int[] boardLoc = convertPanelToBoard(x, y);
         if (debugPanel != null) {
             debugPanel.updateClickLabel(x,y);
         }
 
-        Piece pieceClicked = board.getBoard()[7-y][x];
+        Piece pieceClicked = board.getBoard()[boardLoc[0]][boardLoc[1]];
         if (debugPanel != null) {
             debugPanel.updateClickedPieceLabel(pieceClicked);
         }
 
-        //if no piece was selected and we click on a piece, select it
-        if (selectedPiece == null && pieceClicked != null) {
+        //if no piece was selected, we click on a piece and it's our piece, select it
+        if (selectedPiece == null && pieceClicked != null && board.getIsWhitesTurn() == pieceClicked.isWhite()) {
             selectedPiece = pieceClicked;
             selectedLocation[0] = x;
             selectedLocation[1] = y;
+            //ArrayList<Integer[]> possibleLocations = board.allValidMoves(pieceClicked, boardLoc);
         }
-        //if a piece was selected and we click on a different piece, select it
-        else if (selectedPiece != null && //both aren't null
+        //if a piece was selected and we click on a different piece, select it OR move the piece there
+        else if (selectedPiece != null && (pieceClicked == null || board.getIsWhitesTurn() == pieceClicked.isWhite()) &&
                 (x != selectedLocation[0] || y != selectedLocation[1])) { //but they're in different locations
             selectedPiece = pieceClicked;
             selectedLocation[0] = x;
