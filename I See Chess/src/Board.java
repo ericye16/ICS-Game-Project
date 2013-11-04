@@ -15,7 +15,7 @@ public class Board implements Cloneable{
     private int[] whiteKingLocation, blackKingLocation;
 
     Board() {
-        board = new Piece[][] {
+        /*board = new Piece[][] {
                 {Piece.WhiteRook, Piece.WhiteKnight, Piece.WhiteBishop, Piece.WhiteQueen,
                         Piece.WhiteKing, Piece.WhiteBishop, Piece.WhiteKnight, Piece.WhiteRook},
                 {Piece.WhitePawn, Piece.WhitePawn, Piece.WhitePawn, Piece.WhitePawn,
@@ -28,7 +28,15 @@ public class Board implements Cloneable{
                         Piece.BlackPawn, Piece.BlackPawn, Piece.BlackPawn, Piece.BlackPawn},
                 {Piece.BlackRook, Piece.BlackKnight, Piece.BlackBishop, Piece.BlackQueen,
                         Piece.BlackKing, Piece.BlackBishop, Piece.BlackKnight, Piece.BlackRook}
-        };
+        };*/
+        board = new Piece[][] {{Piece.WhiteRook, Piece.WhitePawn, null, null, null, null, Piece.BlackPawn, Piece.BlackRook},
+                {Piece.WhiteKnight, Piece.WhitePawn, null, null, null, null, Piece.BlackPawn, Piece.BlackKnight},
+                {Piece.WhiteBishop, Piece.WhitePawn, null, null, null, null, Piece.BlackPawn, Piece.BlackBishop},
+                {Piece.WhiteQueen, Piece.WhitePawn, null, null, null, null, Piece.BlackPawn, Piece.BlackQueen},
+                {Piece.WhiteKing, Piece.WhitePawn, null, null, null, null, Piece.BlackPawn, Piece.BlackKing},
+                {Piece.WhiteBishop, Piece.WhitePawn, null, null, null, null, Piece.BlackPawn, Piece.BlackBishop},
+                {Piece.WhiteKnight, Piece.WhitePawn, null, null, null, null, Piece.BlackPawn, Piece.BlackKnight},
+                {Piece.WhiteRook, Piece.WhitePawn, null, null, null, null, Piece.BlackPawn, Piece.BlackRook}};
         isWhitesTurn = true;
     }
 
@@ -49,6 +57,12 @@ public class Board implements Cloneable{
         ArrayList validMoves = new ArrayList<Integer[]>();
         boolean colour = piece.isWhite();
         int[][] possibleMoves = piece.getPossibleMoves();
+        Integer[][] possibleMovesInteger = new Integer[possibleMoves.length][possibleMoves[0].length];
+        for (int i = 0; i < possibleMoves.length; i++) {
+            for (int j = 0; j < possibleMoves[i].length; j++) {
+                possibleMovesInteger[i][j] = new Integer(possibleMoves[i][j]);
+            }
+        }
         for (int i = 0; i < possibleMoves.length; i++) {
             try {
                 boolean added = false;//flag that will be used later, represents whether the possible move has been accepted
@@ -63,7 +77,7 @@ public class Board implements Cloneable{
                                         (i == 0 && location[1] == (colour ? 4 : 3) &&
                                                 ((location[0] != 7 && enPassant[colour ? 0 : 1][0][location[0]]) ||//en passant right
                                                 (i == 1 && location[0] != 0 && enPassant[colour ? 0 : 1][1][location[0] - 1])))) {//en passant left
-                                    validMoves.add(possibleMoves[i]);//validate
+                                    validMoves.add(possibleMovesInteger[i]);//validate
                                     added = true;//flag
                                 }
                                 break;
@@ -73,7 +87,7 @@ public class Board implements Cloneable{
                                 }
                             case 2:
                                 if (board[location[0] + possibleMoves[2][0]][location[1] + possibleMoves[2][1]] == null) {//checks 1 square ahead is empty
-                                    validMoves.add(possibleMoves[i]);
+                                    validMoves.add(possibleMovesInteger[i]);
                                     added = true;//validate
                                 }//flag
                                 break;
@@ -98,7 +112,7 @@ public class Board implements Cloneable{
                                         safe(location, colour) &&
                                         safe(new int[] {location[0] - 1, location[1]}, colour) &&
                                         safe(new int[] {location[0] - 2, location[1]}, colour))) {
-                            validMoves.add(possibleMoves[i]);//validate
+                            validMoves.add(possibleMovesInteger[i]);//validate
                             added = true;//flag
                         }
                         break;
@@ -113,7 +127,7 @@ public class Board implements Cloneable{
                             colour != board[location[0] + possibleMoves[i - 1][0]][location[1] + possibleMoves[i - 1][1]].isWhite())) {//saw enemy piece one tile ago, this tile blocked
                             i -= i % 7 - 7;//adjust counter to next direction if has encountered one of the above
                         } else {//move allowed
-                            validMoves.add(possibleMoves[i]);//validate
+                            validMoves.add(possibleMovesInteger[i]);//validate
                             added = true;//flag
                         }
                         break;
