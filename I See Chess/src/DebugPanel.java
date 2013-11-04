@@ -2,10 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Created with IntelliJ IDEA.
- * User: eric
- * Date: 02/11/13
- * Time: 6:03 PM
+ * A Panel to help debug ChessPanel
  */
 public class DebugPanel extends JPanel {
 
@@ -14,6 +11,9 @@ public class DebugPanel extends JPanel {
     private JLabel clickedPieceLabel;
     private JLabel selectedPieceLabel;
 
+    /**
+     * Constructor for the Debug Panel. Sets the labels to default values
+     */
     public DebugPanel() {
         setOpaque(true);
         setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -27,18 +27,36 @@ public class DebugPanel extends JPanel {
         this.add(motionLabel);
     }
 
+    /**
+     * Update the click label
+     * @param x the x-location of the click
+     * @param y the y-location of the click
+     */
     public void updateClickLabel(int x, int y) {
         clickLabel.setText("| Click x: " + x + " y: " + y + " |");
     }
 
+    /**
+     * Update the motion label
+     * @param x the x-location of the motion
+     * @param y the y-location of the motion
+     */
     public void updateMotionLabel(int x, int y) {
         motionLabel.setText("| Motion x: " + x + " y: " + y + " |");
     }
 
+    /**
+     * Update the type of piece Clicked on last
+     * @param piece the type of piece
+     */
     public void updateClickedPieceLabel(Piece piece) {
         clickedPieceLabel.setText("| Clicked: " + piece + " |");
     }
 
+    /**
+     * Update the type of piece Selected
+     * @param piece the type of piece
+     */
     public void updateSelectedPieceLabel(Piece piece) {
         selectedPieceLabel.setText("| Selected: " + piece + " |");
     }

@@ -1,4 +1,6 @@
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -14,6 +16,9 @@ public class Board implements Cloneable{
     private int turn = 0;
     private int[] whiteKingLocation, blackKingLocation;
 
+    /**
+     * Constructor for the Board, assuming no previous Board
+     */
     Board() {
         /*board = new Piece[][] {
                 {Piece.WhiteRook, Piece.WhiteKnight, Piece.WhiteBishop, Piece.WhiteQueen,
@@ -40,6 +45,10 @@ public class Board implements Cloneable{
         isWhitesTurn = true;
     }
 
+    /**
+     * Constructor for the Board, assuming a previous Board exists
+     * @param currentBoard the previous Board to use
+     */
     Board(Piece[][] currentBoard) {
         board = currentBoard;
         whiteCheck = false;
@@ -53,8 +62,17 @@ public class Board implements Cloneable{
         blackMate = false;
     }
 
+    /**
+     * Find all the valid moves, given the piece and the location of all pieces around it
+     * @param piece the Piece to check
+     * @param location the location of the piece
+     * @return a 2D array of coordinates <i>relative</i> to the piece it can move
+     */
     ArrayList<Integer[]> allValidMoves(Piece piece, int[] location) {
-        ArrayList validMoves = new ArrayList<Integer[]>();
+        if (board[location[0]][location[1]] != piece || (piece == null)) {
+            throw new InvalidParameterException();
+        }
+        ArrayList<Integer[]> validMoves = new ArrayList<Integer[]>();
         boolean colour = piece.isWhite();
         int[][] possibleMoves = piece.getPossibleMoves();
         Integer[][] possibleMovesInteger = new Integer[possibleMoves.length][possibleMoves[0].length];
@@ -145,6 +163,10 @@ public class Board implements Cloneable{
         return validMoves;
     }
 
+    /**
+     * Check the current conditions in terms of stalemates, checkmates, checks, etc and update the boolean flags
+     * To be run after every move.
+     */
     void checkConditions() {
         whiteStalemate = true;
         blackStalemate = true;
@@ -186,6 +208,9 @@ public class Board implements Cloneable{
     }
 
     @Override
+    /**
+     * Clone the object and everything within it.
+     */
     protected Object clone() {
         Board toReturn = new Board(this.board);
         toReturn.turn = turn;
@@ -198,21 +223,44 @@ public class Board implements Cloneable{
     }
 
     @Override
+    /**
+     * Check if two boards have pieces at the same spot
+     */
     public boolean equals(Object other) {
-        return Arrays.deepEquals(board, ((Board) other).board);
+        return other instanceof Board && Arrays.deepEquals(board, ((Board) other).board);
     }
 
+    /**
+     * Find the location of the king
+     * @param colour the colour of the king to find
+     * @return the location of the king
+     */
     int[] findKing(boolean colour) {
         return colour ? whiteKingLocation : blackKingLocation;
     }
 
+    /**
+     * Get the 2D Piece array
+     * @return the 2D Piece array
+     */
     public Piece[][] getBoard() {
         return board;
     }
 
-    Piece movePiece(int[] location, int[] destination) {
+    /**
+     * Move a piece from a location to a destination, doing validity- and move-checking
+     * @param location the current location of the piece
+     * @param destination the future location of the piece
+     * @return the piece moved
+     * @throws IsNotYourTurnException if the piece moved is not the piece currently playing
+     * @throws IllegalMoveException if the piece is not moved to a legal position
+     */
+    Piece movePiece(int[] location, int[] destination) throws IsNotYourTurnException, IllegalMoveException {
         boolean wasAValidMove = false;
         Piece capturerer = board[location[0]][location[1]];
+        if (capturerer.isWhite() != getIsWhitesTurn()) {
+            throw new IsNotYourTurnException();
+        }
 
         ArrayList<Integer[]> validMoves = allValidMoves(capturerer, location);
         for (Integer[] possibleDestination : validMoves) {
@@ -274,10 +322,16 @@ public class Board implements Cloneable{
             throw new NotImplementedException();
             //return capturee;
         } else {
-            throw new IllegalArgumentException();
+            throw new IllegalMoveException();
         }
     }
 
+    /**
+     * Find if a particular location is ``safe'' for a colour
+     * @param location the location to check
+     * @param colour the colour for the location
+     * @return if it is safe
+     */
     boolean safe(int[] location, boolean colour){
         boolean isSafe = true;
         for (int i = 0; i < board.length; i++) {
@@ -319,11 +373,26 @@ public class Board implements Cloneable{
         }
         return isSafe;
     }
+
+    /**
+     * The number of plies passed
+     * @return the number of plies played in the game
+     */
     public int getTurn() {
         return turn;
     }
 
+    /**
+     * Is it White's turn
+     * @return if it's White's move
+     */
     public boolean getIsWhitesTurn() {
         return isWhitesTurn;
     }
+
+    public class ChessException extends Throwable {}
+
+    public class IsNotYourTurnException extends ChessException {}
+
+    public class IllegalMoveException extends ChessException {}
 }
