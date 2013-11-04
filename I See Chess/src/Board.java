@@ -248,6 +248,12 @@ public class Board implements Cloneable{
                     enPassant[capturerer.isWhite() ? 1 : 0][0][location[0] - 1] = true;
                 }
             }
+            if ((capturerer == Piece.WhitePawn || capturerer == Piece.BlackPawn) && destination[1] == (capturerer.isWhite() ? 7 : 0)) {
+                Piece choice = null;
+                //run some PP method that displays the 4 options and accepts user input
+                board[destination[0]][destination[1]] = choice;
+                throw new NotImplementedException();
+            }
             checkConditions();
             throw new NotImplementedException();
             //return capturee;
