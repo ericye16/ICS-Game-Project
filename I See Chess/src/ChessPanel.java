@@ -117,6 +117,10 @@ public class ChessPanel extends JPanel implements MouseInputListener {
             selectedLocation[0] = x;
             selectedLocation[1] = y;
             //ArrayList<Integer[]> possibleLocations = board.allValidMoves(pieceClicked, boardLoc);
+            //System.err.println(possibleLocations.size());
+            /*for (Integer[] possibleLocation: possibleLocations) {
+                System.err.printf("%d, %d\n", possibleLocation[0], possibleLocation[1]);
+            }*/
         }
         //if a piece was selected and we click on a different piece, select it OR move the piece there
         else if (selectedPiece != null && (pieceClicked == null || board.getIsWhitesTurn() == pieceClicked.isWhite()) &&
