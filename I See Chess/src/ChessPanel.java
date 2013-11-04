@@ -1,10 +1,7 @@
 import javax.swing.*;
-import javax.swing.event.MouseInputAdapter;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.ArrayList;
 
 public class ChessPanel extends JPanel implements MouseInputListener {
     private Board board;
@@ -63,10 +60,10 @@ public class ChessPanel extends JPanel implements MouseInputListener {
 
     private void drawPieceOnBoard(Graphics g, Piece piece, int x, int y) {
         g.drawImage(piece.image,
-                y * differenceY(),
-                (7-x) * differenceX(),
-                y * differenceY() + differenceY(),
-                ((7-x) * differenceX())+differenceX(),
+                (x) * differenceY(),
+                (7-y) * differenceX(),
+                (x) * differenceY() + differenceY(),
+                ((7-y) * differenceX())+differenceX(),
                 0,
                 0,
                 piece.image.getHeight(),
@@ -84,7 +81,7 @@ public class ChessPanel extends JPanel implements MouseInputListener {
     }
 
     private int[] convertPanelToBoard(int x, int y) {
-        return new int[] {7 - y, x};
+        return new int[] {x, 7 - y};
     }
 
     public Board getBoard() {
@@ -103,7 +100,7 @@ public class ChessPanel extends JPanel implements MouseInputListener {
         y /= differenceY();
         int[] boardLoc = convertPanelToBoard(x, y);
         if (debugPanel != null) {
-            debugPanel.updateClickLabel(x,y);
+            debugPanel.updateClickLabel(boardLoc[0],boardLoc[1]);
         }
 
         Piece pieceClicked = board.getBoard()[boardLoc[0]][boardLoc[1]];
