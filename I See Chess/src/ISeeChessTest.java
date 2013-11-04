@@ -8,6 +8,7 @@ import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Created with IntelliJ IDEA.
@@ -40,15 +41,24 @@ public class ISeeChessTest {
         System.err.println(correct.size());
         System.err.println(pawnPossibles.size());
         assertTrue(correct.size() == pawnPossibles.size());
-        System.err.println(pawnPossibles.get(0)[0]);
-        for (Integer[] i : pawnPossibles) {
-            for (Integer j : i) {
-                System.err.print(j);
+        boolean[] correctFlags = new boolean[pawnPossibles.size()];
+        for (boolean flag: correctFlags) {
+            flag = true;
+        }
+        for (Integer[] pawnLoc : pawnPossibles) {
+            for (int i = 0; i < correct.size(); i++) {
+                if (correctFlags[i] == false) {
+                    continue;
+                }
+                Integer[] correctLoc = correct.get(i);
+                if (Arrays.equals(pawnLoc, correctLoc)) {
+                    correctFlags[i] = false;
+                }
             }
         }
-        for (Integer[] i : correct) {
-            for (Integer j : i) {
-                System.err.print(j);
+        for (boolean flag: correctFlags) {
+            if (flag == true) {
+                fail("Flags don't work");
             }
         }
     }
