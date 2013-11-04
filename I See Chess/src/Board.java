@@ -123,6 +123,8 @@ public class Board implements Cloneable{
                 if (!safe(findKing(piece.isWhite()), piece.isWhite()) && added) {//checks that the king is safe
                     validMoves.remove(validMoves.size() - 1);//if king wasn't safe and the flag was raised (the move was validated) it removes it
                 }
+                board[location[0]][location[1]] = piece;
+                board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]] = placeholder;
             } catch (ArrayIndexOutOfBoundsException e) {
             }
         }
