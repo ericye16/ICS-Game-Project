@@ -75,6 +75,7 @@ public class ISeeChessTest {
                 Integer[] correctLoc = correct.get(i);
                 if (Arrays.deepEquals(pawnLoc, correctLoc)) {
                     correctFlags[i] = false;
+                    break;
                 }
             }
         }
