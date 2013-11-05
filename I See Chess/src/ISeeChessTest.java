@@ -114,6 +114,67 @@ public class ISeeChessTest {
         } catch (Board.IllegalMoveException e) {
             e.printStackTrace();
             fail();
+        } catch (Board.NeedToPromotePawnException e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    /**
+     * Test that black can move on second turn
+     */
+    public void testBlackSecondMove() {
+        try {
+            board.movePiece(new int[] {4,1}, new int[] {4,2});
+            assertEquals(board.getBoard()[4][2], Piece.WhitePawn);
+            board.movePiece(new int[] {4, 6}, new int[] {4, 4});
+            assertEquals(board.getBoard()[4][4], Piece.BlackPawn);
+            assertNull(board.getBoard()[4][6]);
+        } catch (Board.IsNotYourTurnException e) {
+            e.printStackTrace();
+            fail();
+        } catch (Board.IllegalMoveException e) {
+            e.printStackTrace();
+            fail();
+        } catch (Board.NeedToPromotePawnException e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    /**
+     * Test that black cant move whereever
+     */
+    public void testBlackFail() {
+        try {
+            board.movePiece(new int[] {4,1}, new int[] {4,2});
+            assertEquals(board.getBoard()[4][2], Piece.WhitePawn);
+            board.movePiece(new int[] {4, 6}, new int[] {5, 5});
+            fail();
+        } catch (Board.IsNotYourTurnException e) {
+            e.printStackTrace();
+            fail();
+        } catch (Board.IllegalMoveException e) {
+            e.printStackTrace();
+        } catch (Board.NeedToPromotePawnException e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    public void nomTest() {
+        try {
+            board.movePiece(new int[] {4, 1}, new int[] {4, 3});
+            board.movePiece(new int[] {3, 6}, new int[] {3, 4});
+            board.movePiece(new int[] {4, 3}, new int[] {3, 4});
+            assertNull(board.getBoard()[4][3]);
+            assertEquals(board.getBoard()[3][4], Piece.WhitePawn);
+        } catch (Board.ChessException e) {
+            e.printStackTrace();
+            fail();
         }
     }
 
@@ -132,6 +193,9 @@ public class ISeeChessTest {
         } catch (Board.IllegalMoveException e) {
             e.printStackTrace();
             fail(); // not that kind of exception
+        } catch (Board.NeedToPromotePawnException e) {
+            e.printStackTrace();
+            fail();
         }
     }
 
@@ -149,6 +213,9 @@ public class ISeeChessTest {
         } catch (Board.IllegalMoveException e) { //should be this
             assertNull(board.getBoard()[4][2]);
             assertEquals(board.getBoard()[3][1], Piece.WhitePawn);
+        } catch (Board.NeedToPromotePawnException e) {
+            e.printStackTrace();
+            fail();
         }
     }
 

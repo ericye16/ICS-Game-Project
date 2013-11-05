@@ -244,7 +244,7 @@ public class Board implements Cloneable{
      * @throws IsNotYourTurnException if the piece moved is not the piece currently playing
      * @throws IllegalMoveException if the piece is not moved to a legal position
      */
-    Piece movePiece(int[] location, int[] destination) throws IsNotYourTurnException, IllegalMoveException {
+    Piece movePiece(int[] location, int[] destination) throws IsNotYourTurnException, IllegalMoveException, NeedToPromotePawnException {
         boolean wasAValidMove = false;
         Piece capturerer = board[location[0]][location[1]];
         if (capturerer.isWhite() != getIsWhitesTurn()) {
@@ -302,10 +302,7 @@ public class Board implements Cloneable{
                 }
             }
             if ((capturerer == Piece.WhitePawn || capturerer == Piece.BlackPawn) && destination[1] == (capturerer.isWhite() ? 7 : 0)) {
-                Piece choice = null;
-                //run some PP method that displays the 4 options and accepts user input
-                board[destination[0]][destination[1]] = choice;
-                throw new NotImplementedException();
+                throw new NeedToPromotePawnException();
             }
             checkConditions();
             //throw new NotImplementedException();
@@ -384,4 +381,6 @@ public class Board implements Cloneable{
     public class IsNotYourTurnException extends ChessException {}
 
     public class IllegalMoveException extends ChessException {}
+
+    public class NeedToPromotePawnException extends ChessException {}
 }
