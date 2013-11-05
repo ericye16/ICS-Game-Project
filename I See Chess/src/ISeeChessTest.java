@@ -1,19 +1,11 @@
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-
 import static org.junit.Assert.*;
 
-/**
- * Created with IntelliJ IDEA.
- * User: eric
- * Date: 03/11/13
- * Time: 1:22 PM
- */
 public class ISeeChessTest {
     Board board;
 
@@ -38,7 +30,7 @@ public class ISeeChessTest {
      * Check that all pawns go where they should
      */
     public void testAllPawns() {
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 8; i++) {
             testPawn(i, 1, Piece.WhitePawn);
             testPawn(i, 6, Piece.BlackPawn);
         }
