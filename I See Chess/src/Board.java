@@ -20,20 +20,6 @@ public class Board implements Cloneable{
      * Constructor for the Board, assuming no previous Board
      */
     Board() {
-        /*board = new Piece[][] {
-                {Piece.WhiteRook, Piece.WhiteKnight, Piece.WhiteBishop, Piece.WhiteQueen,
-                        Piece.WhiteKing, Piece.WhiteBishop, Piece.WhiteKnight, Piece.WhiteRook},
-                {Piece.WhitePawn, Piece.WhitePawn, Piece.WhitePawn, Piece.WhitePawn,
-                        Piece.WhitePawn, Piece.WhitePawn, Piece.WhitePawn, Piece.WhitePawn},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {Piece.BlackPawn, Piece.BlackPawn, Piece.BlackPawn, Piece.BlackPawn,
-                        Piece.BlackPawn, Piece.BlackPawn, Piece.BlackPawn, Piece.BlackPawn},
-                {Piece.BlackRook, Piece.BlackKnight, Piece.BlackBishop, Piece.BlackQueen,
-                        Piece.BlackKing, Piece.BlackBishop, Piece.BlackKnight, Piece.BlackRook}
-        };*/
         board = new Piece[][] {{Piece.WhiteRook, Piece.WhitePawn, null, null, null, null, Piece.BlackPawn, Piece.BlackRook},
                 {Piece.WhiteKnight, Piece.WhitePawn, null, null, null, null, Piece.BlackPawn, Piece.BlackKnight},
                 {Piece.WhiteBishop, Piece.WhitePawn, null, null, null, null, Piece.BlackPawn, Piece.BlackBishop},
@@ -83,8 +69,15 @@ public class Board implements Cloneable{
         }
         for (int i = 0; i < possibleMoves.length; i++) {
             try {
-                boolean added = false;//flag that will be used later, represents whether the possible move has been accepted
+                boolean added = false, safeFlag = true;//flag that will be used later, represents whether the possible move has been accepted
                 Piece placeholder = board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]];//target square
+                board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]] = piece;//simulates moving piece, puts piece on target
+                board[location[0]][location[1]] = null;//empties square that piece was on
+                if (!safe(findKing(piece.isWhite()), piece.isWhite())) {
+                     safeFlag = false;
+                }
+                board[location[0]][location[1]] = piece;
+                board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]] = placeholder;
                 switch (piece){
                     case WhitePawn:
                     case BlackPawn:
@@ -105,9 +98,9 @@ public class Board implements Cloneable{
                                 }
                             case 2:
                                 if (board[location[0] + possibleMoves[2][0]][location[1] + possibleMoves[2][1]] == null) {//checks 1 square ahead is empty
-                                    validMoves.add(possibleMovesInteger[i]);
-                                    added = true;//validate
-                                }//flag
+                                    validMoves.add(possibleMovesInteger[i]);//validate
+                                    added = true;//flag
+                                }
                                 break;
                         }
                         break;
@@ -141,22 +134,18 @@ public class Board implements Cloneable{
                     case WhiteQueen:
                     case BlackQueen:
                         if ((placeholder != null && colour == placeholder.isWhite()) ||//sees friendly piece, blocked
-                            (board[location[0] + possibleMoves[i - 1][0]][location[1] + possibleMoves[i - 1][1]] != null &&
+                            (i % 7 != 0 && board[location[0] + possibleMoves[i - 1][0]][location[1] + possibleMoves[i - 1][1]] != null &&
                             colour != board[location[0] + possibleMoves[i - 1][0]][location[1] + possibleMoves[i - 1][1]].isWhite())) {//saw enemy piece one tile ago, this tile blocked
-                            i -= i % 7 - 7;//adjust counter to next direction if has encountered one of the above
+                            i -= i % 7 - 6;//adjust counter to next direction if has encountered one of the above
                         } else {//move allowed
                             validMoves.add(possibleMovesInteger[i]);//validate
                             added = true;//flag
                         }
                         break;
                 }
-                board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]] = piece;//simulates moving piece, puts piece on target
-                board[location[0]][location[1]] = null;//empties square that piece was on
-                if (!safe(findKing(piece.isWhite()), piece.isWhite()) && added) {//checks that the king is safe
+                if (!safeFlag && added) {//checks that the king is safe
                     validMoves.remove(validMoves.size() - 1);//if king wasn't safe and the flag was raised (the move was validated) it removes it
                 }
-                board[location[0]][location[1]] = piece;
-                board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]] = placeholder;
             } catch (ArrayIndexOutOfBoundsException e) {
             }
         }
@@ -264,7 +253,7 @@ public class Board implements Cloneable{
 
         ArrayList<Integer[]> validMoves = allValidMoves(capturerer, location);
         for (Integer[] possibleDestination : validMoves) {
-            if (possibleDestination[0] == destination[0] && possibleDestination[1] == destination[1]) {
+            if (location[0] + possibleDestination[0] == destination[0] && location[1] + possibleDestination[1] == destination[1]) {
                 wasAValidMove = true;
             }
         }
@@ -319,8 +308,8 @@ public class Board implements Cloneable{
                 throw new NotImplementedException();
             }
             checkConditions();
-            throw new NotImplementedException();
-            //return capturee;
+            //throw new NotImplementedException();
+            return capturee;
         } else {
             throw new IllegalMoveException();
         }
@@ -362,7 +351,7 @@ public class Board implements Cloneable{
                                         colour != board[i + spread[k][0]][j + spread[k][1]].isWhite()) ||//this else if is to prevent a queen from seeing you if there is something in the middle, if its looking at a square occupied by a piece friendly to the attacker OR
                                         (k % 7 != 0 && board[i + spread[k - 1][0]][j + spread[k - 1][1]] != null &&
                                                 colour == board[i + spread[k - 1][0]][j + spread[k - 1][1]].isWhite())) {//the "previous" square was occupied by an opposing piece
-                                    k -= k % 7 - 7;//jump ahead to next of 8 directions
+                                    k -= k % 7 - 6;//jump ahead to next of 8 directions
                                 }
                             } catch (ArrayIndexOutOfBoundsException e) {
                             }
