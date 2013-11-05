@@ -95,11 +95,16 @@ public class ISeeChessTest {
         //please note that allValidMoves _should not_ modify the board in any way
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
+                if (j == 2) {
+                    j = 6;
+                }
                 board.allValidMoves(second.getBoard()[i][j], new int[]{i, j});
                 for (int r = 0; r < 8; r++) {
                     for (int c = 0; c < 8; c++) {
+                        System.err.print(board.getBoard()[r][c]);
                         assertEquals(second.getBoard()[r][c], board.getBoard()[r][c]);
                     }
+                    System.err.println();
                 }
             }
         }
@@ -111,7 +116,7 @@ public class ISeeChessTest {
      */
     public void testWhiteFirstMove() {
         try {
-            board.movePiece(new int[] {3,1}, new int[] {3,2});
+            board.movePiece(new int[] {4,1}, new int[] {4,2});
         } catch (Board.IsNotYourTurnException e) {
             e.printStackTrace();
             fail();
@@ -149,6 +154,23 @@ public class ISeeChessTest {
             e.printStackTrace();
             fail();
         } catch (Board.IllegalMoveException e) {
+        }
+    }
+
+    @Test
+    public void testSafe () {
+        Board second = new Board();
+        //please note that allValidMoves _should not_ modify the board in any way
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                board.safe(new int[] {i, j}, true);
+                board.safe(new int[] {i, j}, false);
+                for (int r = 0; r < 8; r++) {
+                    for (int c = 0; c < 8; c++) {
+                        assertEquals(second.getBoard()[r][c], board.getBoard()[r][c]);
+                    }
+                }
+            }
         }
     }
 }
