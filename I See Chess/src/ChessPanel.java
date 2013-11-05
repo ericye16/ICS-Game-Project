@@ -2,6 +2,7 @@ import javax.swing.*;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 /**
  * The ChessPanel, used to display the chess board and all the pieces
@@ -11,6 +12,7 @@ public class ChessPanel extends JPanel implements MouseInputListener {
     private DebugPanel debugPanel;
     private Piece selectedPiece = null;
     private int[] selectedLocation = new int[2];
+    private ArrayList<ColoredLocation> colouredLocations= new ArrayList<ColoredLocation>();
 
     /**
      * Constructor for the ChessPanel
@@ -98,6 +100,25 @@ public class ChessPanel extends JPanel implements MouseInputListener {
     }
 
     /**
+     * Draw a rectangle over a square in order to indicate it's moused over, selected or available.
+     * @param g the Graphics object to draw on
+     * @param color the colour to draw
+     * @param x the x-location to draw at
+     * @param y the y-location to draw at
+     */
+    private void drawChessRectangle(Graphics g, Color color, int x, int y) {
+        Color oldColor = g.getColor();
+        g.setColor(color);
+        float thickness = 3;
+        Graphics2D g2 = (Graphics2D) g;
+        Stroke oldStroke = g2.getStroke();
+        g2.setStroke(new BasicStroke(thickness));
+        g2.drawRect(x * differenceX(), y * differenceY(), differenceX(), differenceY());
+        g2.setStroke(oldStroke);
+        g.setColor(oldColor);
+    }
+
+    /**
      * Find the width of one chess square
      * @return the width, in pixels of one chess square
      */
@@ -120,6 +141,16 @@ public class ChessPanel extends JPanel implements MouseInputListener {
      * @return an integer array containing coordinates as Board expects it
      */
     private int[] convertPanelToBoard(int x, int y) {
+        return new int[] {x, 7 - y};
+    }
+
+    /**
+     * Convert (x, y) from Board into panel
+     * @param x the x from Board
+     * @param y the y from Board
+     * @return an integer array containing coordiantes as Panel expects
+     */
+    private int[] convertBoardToPanel(int x, int y) {
         return new int[] {x, 7 - y};
     }
 
@@ -162,20 +193,15 @@ public class ChessPanel extends JPanel implements MouseInputListener {
         //if no piece was selected, we click on a piece and it's our piece, select it
         if (selectedPiece == null && pieceClicked != null && board.getIsWhitesTurn() == pieceClicked.isWhite()) {
             selectedPiece = pieceClicked;
-            selectedLocation[0] = x;
-            selectedLocation[1] = y;
-            //ArrayList<Integer[]> possibleLocations = board.allValidMoves(pieceClicked, boardLoc);
-            //System.err.println(possibleLocations.size());
-            /*for (Integer[] possibleLocation: possibleLocations) {
-                System.err.printf("%d, %d\n", possibleLocation[0], possibleLocation[1]);
-            }*/
+            selectedLocation[0] = boardLoc[0];
+            selectedLocation[1] = boardLoc[1];
         }
         //if a piece was selected and we click on a different piece, select it OR move the piece there
         else if (selectedPiece != null && (pieceClicked == null || board.getIsWhitesTurn() == pieceClicked.isWhite()) &&
                 (x != selectedLocation[0] || y != selectedLocation[1])) { //but they're in different locations
             selectedPiece = pieceClicked;
-            selectedLocation[0] = x;
-            selectedLocation[1] = y;
+            selectedLocation[0] = boardLoc[0];
+            selectedLocation[1] = boardLoc[1];
         }
         //otherwise if the piece we selected before was the piece clicked on, unselect it
         else if (selectedPiece == pieceClicked && x == selectedLocation[0] && y == selectedLocation[1]) {
@@ -184,6 +210,23 @@ public class ChessPanel extends JPanel implements MouseInputListener {
 
         if (debugPanel != null) {
             debugPanel.updateSelectedPieceLabel(selectedPiece);
+        }
+
+        if (selectedPiece != null) {
+            repaint();
+            ArrayList<Integer[]> validSelectedMoves = board.allValidMoves(selectedPiece, selectedLocation);
+            System.err.println(selectedPiece);
+            for (Integer[] location: validSelectedMoves) {
+                location[0] += selectedLocation[0];
+                location[1] += selectedLocation[1];
+                System.err.printf("%d, %d\n",location[0], location[1]);
+            }
+            Graphics g = getGraphics();
+            colouredLocations.add(new ColoredLocation(x, y, Color.BLUE));
+            for (Integer[] possibleLoc: validSelectedMoves) {
+                int[] panelLoc = convertBoardToPanel(possibleLoc[0], possibleLoc[1]);
+                colouredLocations.add(new ColoredLocation(panelLoc[0], panelLoc[1], Color.GREEN));
+            }
         }
     }
 
@@ -230,8 +273,22 @@ public class ChessPanel extends JPanel implements MouseInputListener {
     public void mouseMoved(MouseEvent mouseEvent) {
         int x = mouseEvent.getX();
         int y = mouseEvent.getY();
+        x /= differenceX();
+        y /= differenceY();
+        int[] boardLoc = convertPanelToBoard(x, y);
         if (debugPanel != null) {
-            debugPanel.updateMotionLabel(x, y);
+            debugPanel.updateMotionLabel(boardLoc[0], boardLoc[1]);
+        }
+    }
+
+    private class ColoredLocation {
+        public int x;
+        public int y;
+        public Color color;
+        public ColoredLocation(int x, int y, Color color) {
+            this.x = x;
+            this.y = y;
+            this.color = color;
         }
     }
 }
