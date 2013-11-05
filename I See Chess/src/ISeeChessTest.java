@@ -6,9 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -112,6 +110,7 @@ public class ISeeChessTest {
     public void testWhiteFirstMove() {
         try {
             board.movePiece(new int[] {3,1}, new int[] {3,2});
+            assertEquals(board.getBoard()[3][2], Piece.WhitePawn);
         } catch (Board.IsNotYourTurnException e) {
             e.printStackTrace();
             fail();
@@ -129,7 +128,9 @@ public class ISeeChessTest {
         try {
             board.movePiece(new int[] {3, 6}, new int[] {3, 5});
             fail(); // if it gets here it sucks
-        } catch (Board.IsNotYourTurnException e) {
+        } catch (Board.IsNotYourTurnException e) { // this is what should happen
+            assertNull(board.getBoard()[3][5]); //check that nothing else has changed
+            assertEquals(board.getBoard()[3][6], Piece.BlackPawn);
             //e.printStackTrace();
         } catch (Board.IllegalMoveException e) {
             e.printStackTrace();
@@ -148,7 +149,9 @@ public class ISeeChessTest {
         } catch (Board.IsNotYourTurnException e) { //should not be this
             e.printStackTrace();
             fail();
-        } catch (Board.IllegalMoveException e) {
+        } catch (Board.IllegalMoveException e) { //should be this
+            assertNull(board.getBoard()[4][2]);
+            assertEquals(board.getBoard()[3][1], Piece.WhitePawn);
         }
     }
 }
