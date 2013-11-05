@@ -13,6 +13,7 @@ public class ChessPanel extends JPanel implements MouseInputListener {
     private Piece selectedPiece = null;
     private int[] selectedLocation = new int[2];
     private ArrayList<ColoredLocation> colouredLocations= new ArrayList<ColoredLocation>();
+    private ColoredLocation mouseLocation = new ColoredLocation();
 
     /**
      * Constructor for the ChessPanel
@@ -43,6 +44,7 @@ public class ChessPanel extends JPanel implements MouseInputListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         drawBackground(g);
+        drawAllChessRectangles(g);
         drawPieces(g);
     }
 
@@ -116,6 +118,13 @@ public class ChessPanel extends JPanel implements MouseInputListener {
         g2.drawRect(x * differenceX(), y * differenceY(), differenceX(), differenceY());
         g2.setStroke(oldStroke);
         g.setColor(oldColor);
+    }
+
+    private void drawAllChessRectangles(Graphics g) {
+        for (ColoredLocation coloredLocation: colouredLocations) {
+            drawChessRectangle(g, coloredLocation.color, coloredLocation.x, coloredLocation.y);
+        }
+        drawChessRectangle(g, mouseLocation.color, mouseLocation.x, mouseLocation.y);
     }
 
     /**
@@ -213,7 +222,6 @@ public class ChessPanel extends JPanel implements MouseInputListener {
         }
 
         if (selectedPiece != null) {
-            repaint();
             ArrayList<Integer[]> validSelectedMoves = board.allValidMoves(selectedPiece, selectedLocation);
             System.err.println(selectedPiece);
             for (Integer[] location: validSelectedMoves) {
@@ -221,13 +229,16 @@ public class ChessPanel extends JPanel implements MouseInputListener {
                 location[1] += selectedLocation[1];
                 System.err.printf("%d, %d\n",location[0], location[1]);
             }
-            Graphics g = getGraphics();
+            colouredLocations.clear();
             colouredLocations.add(new ColoredLocation(x, y, Color.BLUE));
             for (Integer[] possibleLoc: validSelectedMoves) {
                 int[] panelLoc = convertBoardToPanel(possibleLoc[0], possibleLoc[1]);
                 colouredLocations.add(new ColoredLocation(panelLoc[0], panelLoc[1], Color.GREEN));
             }
+        } else {
+            colouredLocations.clear();
         }
+        repaint();
     }
 
     /**
@@ -279,8 +290,17 @@ public class ChessPanel extends JPanel implements MouseInputListener {
         if (debugPanel != null) {
             debugPanel.updateMotionLabel(boardLoc[0], boardLoc[1]);
         }
+        if (x != mouseLocation.x || y != mouseLocation.y || mouseLocation.color == null) {
+            mouseLocation.x = x;
+            mouseLocation.y = y;
+            mouseLocation.color = Color.YELLOW;
+            repaint();
+        }
     }
 
+    /**
+     * A class to encapsulate a coloured rectangle.
+     */
     private class ColoredLocation {
         public int x;
         public int y;
@@ -289,6 +309,12 @@ public class ChessPanel extends JPanel implements MouseInputListener {
             this.x = x;
             this.y = y;
             this.color = color;
+        }
+
+        public ColoredLocation() {
+            this.x = 0;
+            this.y = 0;
+            this.color = null;
         }
     }
 }
