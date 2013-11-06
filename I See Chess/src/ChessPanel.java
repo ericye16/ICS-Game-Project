@@ -1,8 +1,11 @@
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * The ChessPanel, used to display the chess board and all the pieces
@@ -13,7 +16,8 @@ public class ChessPanel extends JPanel implements MouseInputListener {
     private Piece selectedPiece = null;
     private int[] selectedLocation = new int[2];
     private ArrayList<ColoredLocation> colouredLocations= new ArrayList<ColoredLocation>();
-    private ColoredLocation mouseLocation = new ColoredLocation();
+    private ColoredLocation mouseLocation = new ColoredLocation(0, 0, null);
+    private ArrayList<Integer[]> nextLegalMoves = new ArrayList<Integer[]>();
 
     /**
      * Constructor for the ChessPanel
@@ -120,6 +124,10 @@ public class ChessPanel extends JPanel implements MouseInputListener {
         g.setColor(oldColor);
     }
 
+    /**
+     * Draw all the chess selection and motion rectangles
+     * @param g the Graphics object to draw on
+     */
     private void drawAllChessRectangles(Graphics g) {
         for (ColoredLocation coloredLocation: colouredLocations) {
             drawChessRectangle(g, coloredLocation.color, coloredLocation.x, coloredLocation.y);
@@ -179,6 +187,16 @@ public class ChessPanel extends JPanel implements MouseInputListener {
         this.debugPanel = debugPanel;
     }
 
+    private boolean isIn(ArrayList<Integer[]> list, Integer[] ints) {
+        if (ints == null || list == null || list.size() == 0) return false;
+        for (Integer[] checks: list) {
+            if (Arrays.deepEquals(checks, ints)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Handle mouse Clicks
      * @param mouseEvent the mouseEvent from the click
@@ -205,6 +223,26 @@ public class ChessPanel extends JPanel implements MouseInputListener {
             selectedLocation[0] = boardLoc[0];
             selectedLocation[1] = boardLoc[1];
         }
+        else if (selectedPiece != null && (pieceClicked == null || pieceClicked.isWhite() != board.getIsWhitesTurn() &&
+                isIn(nextLegalMoves, new Integer[] {boardLoc[0], boardLoc[1]}))) {
+            try {
+                board.movePiece(selectedLocation, boardLoc);
+            } catch (Board.IsNotYourTurnException e) {
+                e.printStackTrace();
+                throw new NotImplementedException();
+            } catch (Board.IllegalMoveException e) {
+                e.printStackTrace();
+                throw new NotImplementedException();
+            } catch (Board.NeedToPromotePawnException e) {
+                e.printStackTrace();
+                throw new NotImplementedException();
+            }
+            selectedPiece = null;
+            colouredLocations.clear();
+            nextLegalMoves.clear();
+            repaint();
+            return;
+        }
         //if a piece was selected and we click on a different piece, select it OR move the piece there
         else if (selectedPiece != null && (pieceClicked == null || board.getIsWhitesTurn() == pieceClicked.isWhite()) &&
                 (x != selectedLocation[0] || y != selectedLocation[1])) { //but they're in different locations
@@ -215,6 +253,7 @@ public class ChessPanel extends JPanel implements MouseInputListener {
         //otherwise if the piece we selected before was the piece clicked on, unselect it
         else if (selectedPiece == pieceClicked && x == selectedLocation[0] && y == selectedLocation[1]) {
             selectedPiece = null;
+            nextLegalMoves.clear();
         }
 
         if (debugPanel != null) {
@@ -228,6 +267,7 @@ public class ChessPanel extends JPanel implements MouseInputListener {
                 location[0] += selectedLocation[0];
                 location[1] += selectedLocation[1];
                 System.err.printf("%d, %d\n",location[0], location[1]);
+                nextLegalMoves.add(location);
             }
             colouredLocations.clear();
             colouredLocations.add(new ColoredLocation(x, y, Color.BLUE));
@@ -309,12 +349,6 @@ public class ChessPanel extends JPanel implements MouseInputListener {
             this.x = x;
             this.y = y;
             this.color = color;
-        }
-
-        public ColoredLocation() {
-            this.x = 0;
-            this.y = 0;
-            this.color = null;
         }
     }
 }
