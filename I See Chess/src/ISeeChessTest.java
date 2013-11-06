@@ -235,4 +235,13 @@ public class ISeeChessTest {
             }
         }
     }
+
+    @Test
+    public void testSecondPawnMove() throws Board.ChessException {
+        board.movePiece(new int[] {4, 1}, new int[] {4, 2}); // white rook forward one move
+        board.movePiece(new int[] {5, 6}, new int[] {5, 5}); //black rook forward one
+        ArrayList<Integer[]> possibleMoves = board.allValidMoves(Piece.WhitePawn, new int[] {4,2});
+        assertEquals(1, possibleMoves.size()); // there should only be one possible move
+        assertTrue(Arrays.equals(possibleMoves.get(0), new Integer[] {0, 1}));
+    }
 }
