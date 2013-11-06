@@ -187,10 +187,10 @@ public class ChessPanel extends JPanel implements MouseInputListener {
         this.debugPanel = debugPanel;
     }
 
-    private boolean isIn(ArrayList<Integer[]> list, Integer[] ints) {
+    boolean isIn(ArrayList<Integer[]> list, Integer[] ints) {
         if (ints == null || list == null || list.size() == 0) return false;
         for (Integer[] checks: list) {
-            if (Arrays.deepEquals(checks, ints)) {
+            if (checks[0].equals(ints[0]) && checks[1].equals(ints[1])) {
                 return true;
             }
         }
@@ -219,12 +219,15 @@ public class ChessPanel extends JPanel implements MouseInputListener {
 
         //if no piece was selected, we click on a piece and it's our piece, select it
         if (selectedPiece == null && pieceClicked != null && board.getIsWhitesTurn() == pieceClicked.isWhite()) {
+            System.err.println("New selection.");
             selectedPiece = pieceClicked;
             selectedLocation[0] = boardLoc[0];
             selectedLocation[1] = boardLoc[1];
         }
         else if (selectedPiece != null && (pieceClicked == null || pieceClicked.isWhite() != board.getIsWhitesTurn() &&
+                !Arrays.equals(boardLoc, selectedLocation) &&
                 isIn(nextLegalMoves, new Integer[] {boardLoc[0], boardLoc[1]}))) {
+            System.err.println("Selected location to move to.");
             try {
                 board.movePiece(selectedLocation, boardLoc);
             } catch (Board.IsNotYourTurnException e) {
@@ -241,17 +244,18 @@ public class ChessPanel extends JPanel implements MouseInputListener {
             colouredLocations.clear();
             nextLegalMoves.clear();
             repaint();
-            return;
         }
         //if a piece was selected and we click on a different piece, select it OR move the piece there
         else if (selectedPiece != null && (pieceClicked == null || board.getIsWhitesTurn() == pieceClicked.isWhite()) &&
                 (x != selectedLocation[0] || y != selectedLocation[1])) { //but they're in different locations
+            System.err.println("Selecting another piece.");
             selectedPiece = pieceClicked;
             selectedLocation[0] = boardLoc[0];
             selectedLocation[1] = boardLoc[1];
         }
         //otherwise if the piece we selected before was the piece clicked on, unselect it
         else if (selectedPiece == pieceClicked && x == selectedLocation[0] && y == selectedLocation[1]) {
+            System.err.println("Unselecting piece by clicking on it.");
             selectedPiece = null;
             nextLegalMoves.clear();
         }
@@ -270,7 +274,7 @@ public class ChessPanel extends JPanel implements MouseInputListener {
                 nextLegalMoves.add(location);
             }
             colouredLocations.clear();
-            colouredLocations.add(new ColoredLocation(x, y, Color.BLUE));
+            colouredLocations.add(new ColoredLocation(selectedLocation[0], 7 - selectedLocation[1], Color.BLUE));
             for (Integer[] possibleLoc: validSelectedMoves) {
                 int[] panelLoc = convertBoardToPanel(possibleLoc[0], possibleLoc[1]);
                 colouredLocations.add(new ColoredLocation(panelLoc[0], panelLoc[1], Color.GREEN));
