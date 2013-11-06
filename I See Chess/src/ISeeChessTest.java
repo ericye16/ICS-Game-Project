@@ -244,4 +244,25 @@ public class ISeeChessTest {
         assertEquals(1, possibleMoves.size()); // there should only be one possible move
         assertTrue(Arrays.equals(possibleMoves.get(0), new Integer[] {0, 1}));
     }
+
+    @Test
+    public void testSafeMethod() throws Board.ChessException {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                Piece[][] tbs = new Piece[][] {{null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null}};
+                tbs[0][0] = Piece.WhiteRook;
+                if (i == 0 && j == 0) {
+                    j++;
+                }
+                System.err.println(i + "\t" + j);
+                Board someBoard = new Board(tbs);
+                if (someBoard.safe(new int[] {i, j}, false) && (i == 0 || j == 0)) {
+                    fail();
+                }
+                if (!someBoard.safe(new int[] {i, j}, false) && i != 0 && j != 0) {
+                    fail();
+                }
+            }
+        }
+    }
 }

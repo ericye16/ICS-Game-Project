@@ -1,5 +1,4 @@
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -86,8 +85,8 @@ public class Board implements Cloneable{
                             case 1:
                                 if ((placeholder != null && colour != placeholder.isWhite()) ||//allows if attacker wants to capture enemy piece
                                         (i == 0 && location[1] == (colour ? 4 : 3) &&
-                                                ((location[0] != 7 && enPassant[colour ? 0 : 1][0][location[0]]) ||//en passant right
-                                                (i == 1 && location[0] != 0 && enPassant[colour ? 0 : 1][1][location[0] - 1])))) {//en passant left
+                                                ((location[0] != 7 && enPassant[colour ? 0 : 1][1][location[0]]) ||//en passant left
+                                                (i == 1 && location[0] != 0 && enPassant[colour ? 0 : 1][0][location[0] - 1])))) {//en passant right
                                     validMoves.add(possibleMovesInteger[i]);//validate
                                     added = true;//flag
                                 }
@@ -259,9 +258,9 @@ public class Board implements Cloneable{
         }
         if (wasAValidMove) {
             Piece capturee = board[destination[0]][destination[1]];
-            if ((capturerer == Piece.WhitePawn || capturerer == Piece.BlackPawn) && capturee == null && location[0] != destination[0] && location[1] != destination[1]) {
+            if ((capturerer == Piece.WhitePawn || capturerer == Piece.BlackPawn) && capturee == null && location[0] != destination[0]) {
                 capturee = (capturerer.isWhite() ? Piece.BlackPawn : Piece.WhitePawn);
-                board[destination[0]][location[1] + 2 * (destination[1] - location[1])] = null;
+                board[destination[0]][location[1]] = null;
             }
             Board prevBoard = (Board) this.clone();
             prevBoard.history = null; // to remove the amount of memory required
@@ -281,7 +280,7 @@ public class Board implements Cloneable{
             }
             for (int i = 0; i < castlingFlags.length; i++) {
                 for (int j = 0; j < castlingFlags.length; j++) {
-                    if (board[i * 7][j * 7] == (i == 0 ? Piece.WhiteRook : Piece.BlackRook)) {
+                    if (board[i * 7][j * 7] != (i == 0 ? Piece.WhiteRook : Piece.BlackRook)) {
                         castlingFlags[i][j] = false;
                     }
                 }
@@ -342,7 +341,7 @@ public class Board implements Cloneable{
                                 if (Arrays.equals(location, new int[]{i + spread[k][0], j + spread[k][1]}) &&//if the attacker has a direct line to you AND is a queen OR
                                         (threat == Piece.WhiteQueen || threat == Piece.BlackQueen ||
                                                 (((threat == Piece.WhiteBishop || threat == Piece.BlackBishop) && k % 14 >= 7) ||//is a bishop AND we are checking a diagonal OR
-                                                        (threat == Piece.WhiteRook || threat == Piece.BlackRook) && k % 14 < 7))) {//is a rook AND we are checking a cardinal direction
+                                                        ((threat == Piece.WhiteRook || threat == Piece.BlackRook) && k % 14 < 7)))) {//is a rook AND we are checking a cardinal direction
                                     isSafe = false;//you are not safe
                                 } else if ((board[i + spread[k][0]][j + spread[k][1]] != null &&
                                         colour != board[i + spread[k][0]][j + spread[k][1]].isWhite()) ||//this else if is to prevent a queen from seeing you if there is something in the middle, if its looking at a square occupied by a piece friendly to the attacker OR
