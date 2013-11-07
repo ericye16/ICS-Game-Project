@@ -187,6 +187,27 @@ public class ChessPanel extends JPanel implements MouseInputListener {
         this.debugPanel = debugPanel;
     }
 
+    private Piece pawnPromotionChoose(boolean colour) {
+        Piece[] possiblePromotions;
+        if (colour) {
+            possiblePromotions = new Piece[] {
+                    Piece.WhiteBishop, Piece.WhiteKnight, Piece.WhiteQueen, Piece.WhiteRook
+            };
+        } else {
+            possiblePromotions = new Piece[] {
+                    Piece.BlackBishop, Piece.BlackKnight, Piece.BlackQueen, Piece.BlackRook
+            };
+        }
+
+        JOptionPane optionPane = new JOptionPane(possiblePromotions,
+                JOptionPane.QUESTION_MESSAGE,
+                JOptionPane.OK_CANCEL_OPTION,
+                null,
+                new String[] {"What to promote the pawn to?"}
+        );
+        return null;
+    }
+
     static boolean isIn(ArrayList<Integer[]> list, Integer[] ints) {
         if (ints == null || list == null || list.size() == 0) return false;
         for (Integer[] checks: list) {
@@ -356,4 +377,5 @@ public class ChessPanel extends JPanel implements MouseInputListener {
             this.color = color;
         }
     }
+
 }
