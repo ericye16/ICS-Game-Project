@@ -70,7 +70,7 @@ public class Board implements Cloneable{
         }
         for (int i = 0; i < possibleMoves.length; i++) {
             try {
-                boolean isSafe;
+                boolean isSafe, added = false;
                 Piece placeholder = board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]];//target square
                 board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]] = piece;//simulates moving piece, puts piece on target
                 if (piece == Piece.WhiteKing) {
@@ -87,9 +87,6 @@ public class Board implements Cloneable{
                     blackKingLocation = new int[] {location[0], location[1]};
                 }
                 board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]] = placeholder;
-                if (!isSafe) {
-                    continue;
-                }
                 switch (piece){
                     case WhitePawn:
                     case BlackPawn:
@@ -100,6 +97,7 @@ public class Board implements Cloneable{
                                     (i == 0 && location[0] != 0 && enPassant[(colour ? 0 : 1)][0][location[0] - 1]) ||
                                         (i == 1 && location[0] != 7 && enPassant[(colour ? 0 : 1)][1][location[0]])) {//en passant right
                                     validMoves.add(possibleMovesInteger[i]);//validate
+                                    added = true;
                                 }
                                 break;
                             case 3:
@@ -109,6 +107,7 @@ public class Board implements Cloneable{
                             case 2:
                                 if (board[location[0] + possibleMoves[2][0]][location[1] + possibleMoves[2][1]] == null) {//checks 1 square ahead is empty
                                     validMoves.add(possibleMovesInteger[i]);//validate
+                                    added = true;
                                 }
                                 break;
                         }
@@ -133,6 +132,7 @@ public class Board implements Cloneable{
                                         safe(new int[] {location[0] - 1, location[1]}, colour) &&
                                         safe(new int[] {location[0] - 2, location[1]}, colour))) {
                             validMoves.add(possibleMovesInteger[i]);//validate
+                            added = true;
                         }
                         break;
                     case WhiteBishop:
@@ -147,8 +147,12 @@ public class Board implements Cloneable{
                             i -= i % 7 - 6;//adjust counter to next direction if has encountered one of the above
                         } else {//move allowed
                             validMoves.add(possibleMovesInteger[i]);//validate
+                            added = true;
                         }
                         break;
+                }
+                if (!isSafe && added) {
+                    validMoves.remove(validMoves.size() - 1);
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
             }
@@ -347,16 +351,16 @@ public class Board implements Cloneable{
                         int[][] spread = Piece.WhiteQueen.getPossibleMoves();//spread represents the 8 pointed "sun" radiating from one point in 8 directions (4 cardinal, 4 diagonal) for 7 squares as that is the max distance you can travel on a chessboard
                         for (int k = 0; k < spread.length; k++) {//cycles through all possible squares of attacker
                             try {
-                                if (Arrays.equals(location, new int[]{i + spread[k][0], j + spread[k][1]}) &&//if the attacker has a direct line to you AND is a queen OR
-                                        (threat == Piece.WhiteQueen || threat == Piece.BlackQueen ||
-                                                (((threat == Piece.WhiteBishop || threat == Piece.BlackBishop) && k % 14 >= 7) ||//is a bishop AND we are checking a diagonal OR
-                                                        ((threat == Piece.WhiteRook || threat == Piece.BlackRook) && k % 14 < 7)))) {//is a rook AND we are checking a cardinal direction
-                                    isSafe = false;//you are not safe
-                                } else if ((board[i + spread[k][0]][j + spread[k][1]] != null &&
+                                if ((board[i + spread[k][0]][j + spread[k][1]] != null &&
                                         colour != board[i + spread[k][0]][j + spread[k][1]].isWhite()) ||//this else if is to prevent a queen from seeing you if there is something in the middle, if its looking at a square occupied by a piece friendly to the attacker OR
                                         (k % 7 != 0 && board[i + spread[k - 1][0]][j + spread[k - 1][1]] != null &&
                                                 colour == board[i + spread[k - 1][0]][j + spread[k - 1][1]].isWhite())) {//the "previous" square was occupied by an opposing piece
                                     k -= k % 7 - 6;//jump ahead to next of 8 directions
+                                } else if (Arrays.equals(location, new int[]{i + spread[k][0], j + spread[k][1]}) &&//if the attacker has a direct line to you AND is a queen OR
+                                        (threat == Piece.WhiteQueen || threat == Piece.BlackQueen ||
+                                                (((threat == Piece.WhiteBishop || threat == Piece.BlackBishop) && k % 14 >= 7) ||//is a bishop AND we are checking a diagonal OR
+                                                        ((threat == Piece.WhiteRook || threat == Piece.BlackRook) && k % 14 < 7)))) {//is a rook AND we are checking a cardinal direction
+                                    isSafe = false;//you are not safe
                                 }
                             } catch (ArrayIndexOutOfBoundsException e) {
                             }
