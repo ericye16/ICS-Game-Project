@@ -218,7 +218,6 @@ public class ChessPanel extends JPanel implements MouseInputListener {
             debugPanel.updateClickedPieceLabel(pieceClicked);
         }
 
-        System.err.println(selectedPiece == pieceClicked && Arrays.equals(boardLoc, selectedLocation));
         //if no piece was selected, we click on a piece and it's our piece, select it
         if (selectedPiece == null && pieceClicked != null && board.getIsWhitesTurn() == pieceClicked.isWhite()) {
             System.err.println("New selection.");
@@ -268,11 +267,9 @@ public class ChessPanel extends JPanel implements MouseInputListener {
 
         if (selectedPiece != null) {
             ArrayList<Integer[]> validSelectedMoves = board.allValidMoves(selectedPiece, selectedLocation);
-            System.err.println(selectedPiece);
             for (Integer[] location: validSelectedMoves) {
                 location[0] += selectedLocation[0];
                 location[1] += selectedLocation[1];
-                System.err.printf("%d, %d\n",location[0], location[1]);
                 nextLegalMoves.add(location);
             }
             colouredLocations.clear();
@@ -286,9 +283,6 @@ public class ChessPanel extends JPanel implements MouseInputListener {
             nextLegalMoves.clear();
         }
 
-        for (Integer[] nextLegalMove: nextLegalMoves) {
-            System.err.println(nextLegalMove[0] + " " + nextLegalMove[1]);
-        }
         repaint();
     }
 

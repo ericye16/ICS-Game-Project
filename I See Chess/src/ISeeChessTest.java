@@ -147,20 +147,13 @@ public class ISeeChessTest {
     /**
      * Test that black cant move whereever
      */
-    public void testBlackFail() {
+    public void testBlackFail() throws Board.ChessException {
         try {
             board.movePiece(new int[] {4,1}, new int[] {4,2});
             assertEquals(board.getBoard()[4][2], Piece.WhitePawn);
             board.movePiece(new int[] {4, 6}, new int[] {5, 5});
             fail();
-        } catch (Board.IsNotYourTurnException e) {
-            e.printStackTrace();
-            fail();
         } catch (Board.IllegalMoveException e) {
-            e.printStackTrace();
-        } catch (Board.NeedToPromotePawnException e) {
-            e.printStackTrace();
-            fail();
         }
     }
 
@@ -254,6 +247,28 @@ public class ISeeChessTest {
         assertTrue(ChessPanel.isIn(testAgainst, new Integer[] {1,2}));
         assertFalse(ChessPanel.isIn(testAgainst, new Integer[] {1,3}));
         assertFalse(ChessPanel.isIn(testAgainst, new Integer[] {6,7}));
+    }
+
+    @Test
+    public void testWhiteKingCheck() throws Board.ChessException {
+        board.movePiece(new int[] {5, 1}, new int[] {5, 2});
+        board.movePiece(new int[] {4, 6}, new int[] {4, 5});
+        board.movePiece(new int[] {3, 1}, new int[] {3, 2});
+        board.movePiece(new int[] {3, 7}, new int[] {7, 3});
+        ArrayList<Integer[]> possibleMoves;
+        //king should be able to hide
+        possibleMoves = board.allValidMoves(Piece.WhiteKing, new int[] {4, 0});
+        assertEquals(1, possibleMoves.size());
+        assertArrayEquals(new Integer[] {1,2}, new Integer[] {1,2});
+        assertArrayEquals(new Integer[] {-1, 1}, possibleMoves.get(0));
+        //pawn should be able to block queen
+        possibleMoves = board.allValidMoves(Piece.WhitePawn, new int[] {6, 1});
+        assertEquals(1, possibleMoves.size());
+        assertArrayEquals(new Integer[] {0, 1}, possibleMoves.get(0));
+        //other pawn should not be able to move
+        possibleMoves = board.allValidMoves(Piece.WhitePawn, new int[] {7, 1});
+        assertEquals(0, possibleMoves.size());
+
     }
 
     /*@Test
