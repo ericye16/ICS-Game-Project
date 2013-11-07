@@ -93,10 +93,10 @@ public class ChessPanel extends JPanel implements MouseInputListener {
      */
     private void drawPieceOnBoard(Graphics g, Piece piece, int x, int y) {
         g.drawImage(piece.image,
-                (x) * differenceY(),
-                (7-y) * differenceX(),
-                (x) * differenceY() + differenceY(),
-                ((7-y) * differenceX())+differenceX(),
+                (x) * differenceX(),
+                (7-y) * differenceY(),
+                (x) * differenceX() + differenceX(),
+                ((7-y) * differenceY())+differenceY(),
                 0,
                 0,
                 piece.image.getHeight(),
@@ -187,7 +187,7 @@ public class ChessPanel extends JPanel implements MouseInputListener {
         this.debugPanel = debugPanel;
     }
 
-    boolean isIn(ArrayList<Integer[]> list, Integer[] ints) {
+    static boolean isIn(ArrayList<Integer[]> list, Integer[] ints) {
         if (ints == null || list == null || list.size() == 0) return false;
         for (Integer[] checks: list) {
             if (checks[0].equals(ints[0]) && checks[1].equals(ints[1])) {
@@ -213,10 +213,12 @@ public class ChessPanel extends JPanel implements MouseInputListener {
         }
 
         Piece pieceClicked = board.getBoard()[boardLoc[0]][boardLoc[1]];
+
         if (debugPanel != null) {
             debugPanel.updateClickedPieceLabel(pieceClicked);
         }
 
+        System.err.println(selectedPiece == pieceClicked && Arrays.equals(boardLoc, selectedLocation));
         //if no piece was selected, we click on a piece and it's our piece, select it
         if (selectedPiece == null && pieceClicked != null && board.getIsWhitesTurn() == pieceClicked.isWhite()) {
             System.err.println("New selection.");
@@ -224,9 +226,9 @@ public class ChessPanel extends JPanel implements MouseInputListener {
             selectedLocation[0] = boardLoc[0];
             selectedLocation[1] = boardLoc[1];
         }
-        else if (selectedPiece != null && (pieceClicked == null || pieceClicked.isWhite() != board.getIsWhitesTurn() &&
-                !Arrays.equals(boardLoc, selectedLocation) &&
-                isIn(nextLegalMoves, new Integer[] {boardLoc[0], boardLoc[1]}))) {
+        else if (selectedPiece != null && isIn(nextLegalMoves, new Integer[] {boardLoc[0], boardLoc[1]}) &&
+                !Arrays.equals(boardLoc, selectedLocation)
+                ) {
             System.err.println("Selected location to move to.");
             try {
                 board.movePiece(selectedLocation, boardLoc);
@@ -247,14 +249,14 @@ public class ChessPanel extends JPanel implements MouseInputListener {
         }
         //if a piece was selected and we click on a different piece, select it OR move the piece there
         else if (selectedPiece != null && (pieceClicked == null || board.getIsWhitesTurn() == pieceClicked.isWhite()) &&
-                (x != selectedLocation[0] || y != selectedLocation[1])) { //but they're in different locations
+                !Arrays.equals(boardLoc, selectedLocation)) { //but they're in different locations
             System.err.println("Selecting another piece.");
             selectedPiece = pieceClicked;
             selectedLocation[0] = boardLoc[0];
             selectedLocation[1] = boardLoc[1];
         }
         //otherwise if the piece we selected before was the piece clicked on, unselect it
-        else if (selectedPiece == pieceClicked && x == selectedLocation[0] && y == selectedLocation[1]) {
+        else if (selectedPiece == pieceClicked && Arrays.equals(boardLoc, selectedLocation)) {
             System.err.println("Unselecting piece by clicking on it.");
             selectedPiece = null;
             nextLegalMoves.clear();
@@ -281,6 +283,11 @@ public class ChessPanel extends JPanel implements MouseInputListener {
             }
         } else {
             colouredLocations.clear();
+            nextLegalMoves.clear();
+        }
+
+        for (Integer[] nextLegalMove: nextLegalMoves) {
+            System.err.println(nextLegalMove[0] + " " + nextLegalMove[1]);
         }
         repaint();
     }

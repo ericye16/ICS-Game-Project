@@ -245,6 +245,17 @@ public class ISeeChessTest {
         assertTrue(Arrays.equals(possibleMoves.get(0), new Integer[] {0, 1}));
     }
 
+    @Test
+    public void testIsIn() {
+        ArrayList<Integer[]> testAgainst = new ArrayList<Integer[]>();
+        testAgainst.add(new Integer[]{1, 2});
+        testAgainst.add(new Integer[]{2, 3});
+        testAgainst.add(new Integer[] {4, 5});
+        assertTrue(ChessPanel.isIn(testAgainst, new Integer[] {1,2}));
+        assertFalse(ChessPanel.isIn(testAgainst, new Integer[] {1,3}));
+        assertFalse(ChessPanel.isIn(testAgainst, new Integer[] {6,7}));
+    }
+
     /*@Test
     public void kingTest() throws Board.ChessException {
         Board board = new Board();
