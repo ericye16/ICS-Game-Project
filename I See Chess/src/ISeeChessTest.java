@@ -238,10 +238,29 @@ public class ISeeChessTest {
 
     @Test
     public void testSecondPawnMove() throws Board.ChessException {
-        board.movePiece(new int[] {4, 1}, new int[] {4, 2}); // white rook forward one move
-        board.movePiece(new int[] {5, 6}, new int[] {5, 5}); //black rook forward one
+        board.movePiece(new int[] {4, 1}, new int[] {4, 2}); // white pawn forward one move
+        board.movePiece(new int[] {5, 6}, new int[] {5, 5}); //black pawn forward one
         ArrayList<Integer[]> possibleMoves = board.allValidMoves(Piece.WhitePawn, new int[] {4,2});
         assertEquals(1, possibleMoves.size()); // there should only be one possible move
         assertTrue(Arrays.equals(possibleMoves.get(0), new Integer[] {0, 1}));
     }
+
+    /*@Test
+    public void safeMethodTest() {
+        Piece[][] prelimBoard = new Piece[][] {{null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null}};
+        prelimBoard[4][4] = Piece.WhiteQueen;
+        prelimBoard[0][0] = Piece.WhiteKnight;
+        prelimBoard[7][7] = Piece.WhiteKing;
+        prelimBoard[1][7] = Piece.WhiteBishop;
+        prelimBoard[0][1] = Piece.WhitePawn;
+        prelimBoard[5][6] = Piece.WhiteRook;
+        Board board = new Board(prelimBoard);
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (!board.safe(new int[] {i, j}, false)) {
+                    System.err.println((i + 1) + "\t" + (j + 1));
+                }
+            }
+        }
+    }      */
 }

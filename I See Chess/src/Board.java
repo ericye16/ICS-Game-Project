@@ -91,7 +91,7 @@ public class Board implements Cloneable{
                                 }
                                 break;
                             case 3:
-                                if (placeholder != null && location[1] == (colour ?  1 : 6)) {//checks 2 squares ahead is empty, if it is, it will move on to check one square ahead
+                                if (placeholder != null || !(location[1] == (colour ?  1 : 6))) {//checks 2 squares ahead is empty, if it is, it will move on to check one square ahead
                                     break;
                                 }
                             case 2:
