@@ -13,7 +13,7 @@ public class Board implements Cloneable{
             {{false, false, false, false, false, false, false},
                     {false, false, false, false, false, false, false}}}; //array representing whether one can currently en passant there are 7 ways to do this, in 2 directions, by 2 colours, array is 2 * 2 * 7
     private int turn = 0;
-    private int[] whiteKingLocation, blackKingLocation;
+    int[] whiteKingLocation, blackKingLocation;
 
     /**
      * Constructor for the Board, assuming no previous Board
@@ -28,14 +28,6 @@ public class Board implements Cloneable{
                 {Piece.WhiteKnight, Piece.WhitePawn, null, null, null, null, Piece.BlackPawn, Piece.BlackKnight},
                 {Piece.WhiteRook, Piece.WhitePawn, null, null, null, null, Piece.BlackPawn, Piece.BlackRook}};
         isWhitesTurn = true;
-    }
-
-    /**
-     * Constructor for the Board, assuming a previous Board exists
-     * @param currentBoard the previous Board to use
-     */
-    Board(Piece[][] currentBoard) {
-        board = currentBoard;
         whiteCheck = false;
         blackCheck = false;
         whiteStalemate = false;
@@ -45,6 +37,16 @@ public class Board implements Cloneable{
         stalemate = false;
         whiteMate = false;
         blackMate = false;
+        whiteKingLocation = new int[] {4, 0};
+        blackKingLocation = new int[] {4, 7};
+    }
+
+    /**
+     * Constructor for the Board, assuming a previous Board exists
+     * @param currentBoard the previous Board to use
+     */
+    Board(Piece[][] currentBoard) {
+        board = currentBoard;
     }
 
     /**
@@ -68,15 +70,26 @@ public class Board implements Cloneable{
         }
         for (int i = 0; i < possibleMoves.length; i++) {
             try {
-                boolean added = false, safeFlag = true;//flag that will be used later, represents whether the possible move has been accepted
+                boolean isSafe;
                 Piece placeholder = board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]];//target square
                 board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]] = piece;//simulates moving piece, puts piece on target
-                board[location[0]][location[1]] = null;//empties square that piece was on
-                if (!safe(findKing(piece.isWhite()), piece.isWhite())) {
-                     safeFlag = false;
+                if (piece == Piece.WhiteKing) {
+                    whiteKingLocation = new int[] {location[0] + possibleMoves[i][0], location[1] + possibleMoves[i][1]};
+                } else if (piece == Piece.BlackKing) {
+                    blackKingLocation = new int[] {location[0] + possibleMoves[i][0], location[1] + possibleMoves[i][1]};
                 }
+                board[location[0]][location[1]] = null;//empties square that piece was on
+                isSafe = safe(findKing(colour), colour);
                 board[location[0]][location[1]] = piece;
+                if (piece == Piece.WhiteKing) {
+                    whiteKingLocation = new int[] {location[0], location[1]};
+                } else if (piece == Piece.BlackKing) {
+                    blackKingLocation = new int[] {location[0], location[1]};
+                }
                 board[location[0] + possibleMoves[i][0]][location[1] + possibleMoves[i][1]] = placeholder;
+                if (!isSafe) {
+                    continue;
+                }
                 switch (piece){
                     case WhitePawn:
                     case BlackPawn:
@@ -84,10 +97,9 @@ public class Board implements Cloneable{
                             case 0:
                             case 1:
                                 if ((placeholder != null && colour != placeholder.isWhite()) ||//allows if attacker wants to capture enemy piece
-                                    (i == 0 && location[0] != 0 && enPassant[(piece.isWhite() ? 0 : 1)][0][location[0] - 1]) ||
-                                        (i == 1 && location[0] != 7 && enPassant[(piece.isWhite() ? 0 : 1)][1][location[0]])) {//en passant right
+                                    (i == 0 && location[0] != 0 && enPassant[(colour ? 0 : 1)][0][location[0] - 1]) ||
+                                        (i == 1 && location[0] != 7 && enPassant[(colour ? 0 : 1)][1][location[0]])) {//en passant right
                                     validMoves.add(possibleMovesInteger[i]);//validate
-                                    added = true;//flag
                                 }
                                 break;
                             case 3:
@@ -97,7 +109,6 @@ public class Board implements Cloneable{
                             case 2:
                                 if (board[location[0] + possibleMoves[2][0]][location[1] + possibleMoves[2][1]] == null) {//checks 1 square ahead is empty
                                     validMoves.add(possibleMovesInteger[i]);//validate
-                                    added = true;//flag
                                 }
                                 break;
                         }
@@ -122,7 +133,6 @@ public class Board implements Cloneable{
                                         safe(new int[] {location[0] - 1, location[1]}, colour) &&
                                         safe(new int[] {location[0] - 2, location[1]}, colour))) {
                             validMoves.add(possibleMovesInteger[i]);//validate
-                            added = true;//flag
                         }
                         break;
                     case WhiteBishop:
@@ -137,12 +147,8 @@ public class Board implements Cloneable{
                             i -= i % 7 - 6;//adjust counter to next direction if has encountered one of the above
                         } else {//move allowed
                             validMoves.add(possibleMovesInteger[i]);//validate
-                            added = true;//flag
                         }
                         break;
-                }
-                if (!safeFlag && added) {//checks that the king is safe
-                    validMoves.remove(validMoves.size() - 1);//if king wasn't safe and the flag was raised (the move was validated) it removes it
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
             }

@@ -246,6 +246,20 @@ public class ISeeChessTest {
     }
 
     /*@Test
+    public void kingTest() throws Board.ChessException {
+        Board board = new Board();
+        System.err.println(board.whiteKingLocation[0] + "\t" + board.whiteKingLocation[1]);
+        board.movePiece(new int[] {5, 1}, new int[] {5, 2});
+        System.err.println(board.whiteKingLocation[0] + "\t" + board.whiteKingLocation[1]);
+        board.movePiece(new int[] {4, 6}, new int[] {4, 5});
+        System.err.println(board.whiteKingLocation[0] + "\t" + board.whiteKingLocation[1]);
+        board.movePiece(new int[] {0, 1}, new int[] {0, 2});
+        System.err.println(board.whiteKingLocation[0] + "\t" + board.whiteKingLocation[1]);
+        board.movePiece(new int[] {3, 7}, new int[] {7, 3});
+        System.err.println(board.whiteKingLocation[0] + "\t" + board.whiteKingLocation[1]);
+    }
+
+    @Test
     public void safeMethodTest() {
         Piece[][] prelimBoard = new Piece[][] {{null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null}};
         prelimBoard[4][4] = Piece.WhiteQueen;
