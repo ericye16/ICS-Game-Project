@@ -291,10 +291,11 @@ public class Board implements Cloneable{
                 board[(destination[0] < location[0] ? 0 : 7)][location[1]] = null;
                 board[location[0] + (destination[0] - location[0]) / 2][location[1]] = (colour ? Piece.WhiteRook : Piece.BlackRook);
             }
+
             for (int i = 0; i < castlingFlags.length; i++) {
                 for (int j = 0; j < castlingFlags.length; j++) {
                     if (board[i * 7][j * 7] != (j == 0 ? Piece.WhiteRook : Piece.BlackRook)) {
-                        castlingFlags[i][j] = false;
+                        castlingFlags[j][i] = false;
                     }
                 }
             }
