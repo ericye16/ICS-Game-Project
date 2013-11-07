@@ -106,8 +106,8 @@ public class Board implements Cloneable{
                     case BlackKnight:
                     case WhiteKing:
                     case BlackKing:
-                        if (placeholder == null ||
-                                colour != placeholder.isWhite() ||//allows if attacker wants to capture enemy piece
+                        if ((i < 8 && (placeholder == null ||
+                                colour != placeholder.isWhite())) ||//allows if attacker wants to capture enemy piece
                                 (i == 8 && castlingFlags[colour ? 0 : 1][0] &&//all conditions for castling: squares are empty, king and rook haven't moved yet (flags), king not moving out of, into, or through check, right
                                         board[location[0] + 1][location[1]] == null &&
                                         board[location[0] + 2][location[1]] == null &&
@@ -243,9 +243,9 @@ public class Board implements Cloneable{
      * @throws IllegalMoveException if the piece is not moved to a legal position
      */
     Piece movePiece(int[] location, int[] destination) throws IsNotYourTurnException, IllegalMoveException, NeedToPromotePawnException {
-        boolean wasAValidMove = false;
         Piece capturerer = board[location[0]][location[1]];
-        if (capturerer.isWhite() != getIsWhitesTurn()) {
+        boolean wasAValidMove = false, colour = capturerer.isWhite();
+        if (colour != getIsWhitesTurn()) {
             throw new IsNotYourTurnException();
         }
 
@@ -258,7 +258,7 @@ public class Board implements Cloneable{
         if (wasAValidMove) {
             Piece capturee = board[destination[0]][destination[1]];
             if ((capturerer == Piece.WhitePawn || capturerer == Piece.BlackPawn) && capturee == null && location[0] != destination[0]) {
-                capturee = (capturerer.isWhite() ? Piece.BlackPawn : Piece.WhitePawn);
+                capturee = (colour ? Piece.BlackPawn : Piece.WhitePawn);
                 board[destination[0]][location[1]] = null;
             }
             Board prevBoard = (Board) this.clone();
@@ -277,9 +277,13 @@ public class Board implements Cloneable{
                 castlingFlags[1][0] = false;
                 castlingFlags[1][1] = false;
             }
+            if ((capturerer == Piece.WhiteKing || capturerer == Piece.BlackKing) && Math.abs(destination[0] - location[0]) == 2) {
+                board[(destination[0] < location[0] ? 0 : 7)][location[1]] = null;
+                board[location[0] + (destination[0] - location[0]) / 2][location[1]] = (colour ? Piece.WhiteRook : Piece.BlackRook);
+            }
             for (int i = 0; i < castlingFlags.length; i++) {
                 for (int j = 0; j < castlingFlags.length; j++) {
-                    if (board[i * 7][j * 7] != (i == 0 ? Piece.WhiteRook : Piece.BlackRook)) {
+                    if (board[i * 7][j * 7] != (j == 0 ? Piece.WhiteRook : Piece.BlackRook)) {
                         castlingFlags[i][j] = false;
                     }
                 }
@@ -291,15 +295,15 @@ public class Board implements Cloneable{
                     }
                 }
             }
-            if ((capturerer == Piece.WhitePawn || capturerer == Piece.BlackPawn) && location[1] == (capturerer.isWhite() ? 1 : 6) && destination[1] == (capturerer.isWhite() ? 3 : 4)) {
-                if (location [0] != 7 && board[location[0] + 1][destination[1]] == (capturerer.isWhite() ? Piece.BlackPawn : Piece.WhitePawn)) {
-                    enPassant[capturerer.isWhite() ? 1 : 0][0][location[0]] = true;
+            if ((capturerer == Piece.WhitePawn || capturerer == Piece.BlackPawn) && location[1] == (colour ? 1 : 6) && destination[1] == (colour ? 3 : 4)) {
+                if (location [0] != 7 && board[location[0] + 1][destination[1]] == (colour ? Piece.BlackPawn : Piece.WhitePawn)) {
+                    enPassant[colour ? 1 : 0][0][location[0]] = true;
                 }
-                if (location [0] != 0 && board[location[0] - 1][destination[1]] == (capturerer.isWhite() ? Piece.BlackPawn : Piece.WhitePawn)) {
-                    enPassant[capturerer.isWhite() ? 1 : 0][1][location[0] - 1] = true;
+                if (location [0] != 0 && board[location[0] - 1][destination[1]] == (colour ? Piece.BlackPawn : Piece.WhitePawn)) {
+                    enPassant[colour ? 1 : 0][1][location[0] - 1] = true;
                 }
             }
-            if ((capturerer == Piece.WhitePawn || capturerer == Piece.BlackPawn) && destination[1] == (capturerer.isWhite() ? 7 : 0)) {
+            if ((capturerer == Piece.WhitePawn || capturerer == Piece.BlackPawn) && destination[1] == (colour ? 7 : 0)) {
                 throw new NeedToPromotePawnException();
             }
             checkConditions();

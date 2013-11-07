@@ -99,7 +99,7 @@ public enum Piece {
                 break;
             case WhiteKing:
             case BlackKing:
-                moves = new int[][] {{0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}, {-1, -1}, {-1, 0}, {-1, 1}, {-2, 0}, {2, 0}};
+                moves = new int[][] {{0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}, {-1, -1}, {-1, 0}, {-1, 1}, {2, 0}, {-2, 0}};
                 break;
         }
         return moves;
