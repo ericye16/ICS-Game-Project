@@ -84,9 +84,8 @@ public class Board implements Cloneable{
                             case 0:
                             case 1:
                                 if ((placeholder != null && colour != placeholder.isWhite()) ||//allows if attacker wants to capture enemy piece
-                                        (i == 0 && location[1] == (colour ? 4 : 3) &&
-                                                ((location[0] != 7 && enPassant[colour ? 0 : 1][1][location[0]]) ||//en passant left
-                                                (i == 1 && location[0] != 0 && enPassant[colour ? 0 : 1][0][location[0] - 1])))) {//en passant right
+                                    (i == 0 && location[0] != 0 && enPassant[(piece.isWhite() ? 0 : 1)][0][location[0] - 1]) ||
+                                        (i == 1 && location[0] != 7 && enPassant[(piece.isWhite() ? 0 : 1)][1][location[0]])) {//en passant right
                                     validMoves.add(possibleMovesInteger[i]);//validate
                                     added = true;//flag
                                 }
@@ -297,7 +296,7 @@ public class Board implements Cloneable{
                     enPassant[capturerer.isWhite() ? 1 : 0][0][location[0]] = true;
                 }
                 if (location [0] != 0 && board[location[0] - 1][destination[1]] == (capturerer.isWhite() ? Piece.BlackPawn : Piece.WhitePawn)) {
-                    enPassant[capturerer.isWhite() ? 1 : 0][0][location[0] - 1] = true;
+                    enPassant[capturerer.isWhite() ? 1 : 0][1][location[0] - 1] = true;
                 }
             }
             if ((capturerer == Piece.WhitePawn || capturerer == Piece.BlackPawn) && destination[1] == (capturerer.isWhite() ? 7 : 0)) {

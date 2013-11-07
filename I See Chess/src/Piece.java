@@ -66,7 +66,7 @@ public enum Piece {
             case WhitePawn:
                 pawnConstant = 1;
             case BlackPawn:
-                moves = new int[][] {{1, pawnConstant}, {-1, pawnConstant}, {0, pawnConstant}, {0, pawnConstant * 2}};
+                moves = new int[][] {{-1, pawnConstant}, {1, pawnConstant}, {0, pawnConstant}, {0, pawnConstant * 2}};
                 break;
             case WhiteKnight:
             case BlackKnight:
