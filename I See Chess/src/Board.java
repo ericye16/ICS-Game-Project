@@ -12,7 +12,7 @@ public class Board implements Cloneable{
             {false, false, false, false, false, false, false}},
             {{false, false, false, false, false, false, false},
                     {false, false, false, false, false, false, false}}}; //array representing whether one can currently en passant there are 7 ways to do this, in 2 directions, by 2 colours, array is 2 * 2 * 7
-    private int turn = 0;
+    private int turn = 0, whitePawnLocation, blackPawnLocation;
     int[] whiteKingLocation, blackKingLocation;
 
     /**
@@ -244,6 +244,11 @@ public class Board implements Cloneable{
         return board;
     }
 
+    public int getPawnLocation(boolean colour) {
+        return (colour ? whitePawnLocation : blackPawnLocation);
+    }
+
+
     /**
      * Move a piece from a location to a destination, doing validity- and move-checking
      * @param location the current location of the piece
@@ -315,6 +320,11 @@ public class Board implements Cloneable{
                 }
             }
             if ((capturerer == Piece.WhitePawn || capturerer == Piece.BlackPawn) && destination[1] == (colour ? 7 : 0)) {
+                if (capturerer.isWhite()) {
+                    whitePawnLocation = destination[0];
+                } else {
+                    blackPawnLocation = destination[0];
+                }
                 throw new NeedToPromotePawnException();
             }
             checkConditions();

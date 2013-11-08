@@ -260,6 +260,7 @@ public class ChessPanel extends JPanel implements MouseInputListener {
                 throw new NotImplementedException();
             } catch (Board.NeedToPromotePawnException e) {
                 e.printStackTrace();
+                board.getBoard()[board.getPawnLocation(!board.getIsWhitesTurn())][(board.getIsWhitesTurn() ? 0 : 7)] = pawnPromotionChoose(!board.getIsWhitesTurn());
                 throw new NotImplementedException();
             }
             selectedPiece = null;
