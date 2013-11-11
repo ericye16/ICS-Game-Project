@@ -204,6 +204,29 @@ public class Board implements Cloneable{
         }
     }
 
+    public void promotePawn(int[] prevLocation, Piece newPiece) throws IllegalMoveException {
+        Piece pieceAt = board[prevLocation[0]][prevLocation[1]];
+        if (pieceAt == null || pieceAt.isWhite() == getIsWhitesTurn() || (pieceAt != Piece.BlackPawn && pieceAt != Piece.WhitePawn)) {
+            throw new IllegalMoveException();
+        }
+        System.err.println(prevLocation[0] != getPawnLocation(getIsWhitesTurn()));
+        System.err.println(prevLocation[0]);
+        System.err.println(getPawnLocation(!getIsWhitesTurn()));
+        System.err.println(prevLocation[1] != (getIsWhitesTurn()? 0 : 7));
+        if (prevLocation[0] != getPawnLocation(getIsWhitesTurn()) || prevLocation[1] != (getIsWhitesTurn()? 0 : 7)) {
+            throw new IllegalMoveException();
+        }
+        if (newPiece.isWhite() != pieceAt.isWhite()) {
+            throw new IllegalMoveException();
+        }
+        if (newPiece == Piece.BlackBishop || newPiece == Piece.BlackKnight || newPiece == Piece.BlackQueen || newPiece == Piece.BlackRook ||
+                newPiece == Piece.WhiteBishop || newPiece == Piece.WhiteKnight || newPiece == Piece.WhiteQueen || newPiece == Piece.WhiteRook) {
+            board[prevLocation[0]][prevLocation[1]] = newPiece;
+        } else {
+            throw new IllegalMoveException();
+        }
+    }
+
     @Override
     /**
      * Clone the object and everything within it.
@@ -325,7 +348,7 @@ public class Board implements Cloneable{
                 } else {
                     blackPawnLocation = destination[0];
                 }
-                throw new NeedToPromotePawnException();
+                throw new NeedToPromotePawnException(capturerer.isWhite());
             }
             checkConditions();
             //throw new NotImplementedException();
@@ -405,5 +428,14 @@ public class Board implements Cloneable{
 
     public class IllegalMoveException extends ChessException {}
 
-    public class NeedToPromotePawnException extends ChessException {}
+    public class NeedToPromotePawnException extends ChessException {
+        private boolean colour;
+        public NeedToPromotePawnException(boolean colour) {
+            this.colour = colour;
+        }
+
+        public boolean getColour() {
+            return colour;
+        }
+    }
 }

@@ -268,6 +268,37 @@ public class ISeeChessTest {
         //other pawn should not be able to move
         possibleMoves = board.allValidMoves(Piece.WhitePawn, new int[] {7, 1});
         assertEquals(0, possibleMoves.size());
+    }
+
+    @Test
+    public void testPawnPromotion() throws Board.ChessException {
+        board.movePiece(new int[] {4, 1}, new int[] {4, 3});
+        board.movePiece(new int[] {5, 6}, new int[] {5, 4});
+        board.movePiece(new int[] {4, 3}, new int[] {5, 4}); //eat it!
+        board.movePiece(new int[] {4, 6}, new int[] {4, 5});//move the pawn out of the way for the bishop
+        board.movePiece(new int[] {5, 4}, new int[] {5, 5});
+        board.movePiece(new int[] {5, 7}, new int[] {4, 6});
+        board.movePiece(new int[] {5, 5}, new int[] {6, 6});
+        board.movePiece(new int[] {6, 7}, new int[] {7, 5});
+        try {
+            board.movePiece(new int[] {6, 6}, new int[] {6, 7});
+            fail("Should have thrown NeedToPromotePawnException");
+        } catch (Board.NeedToPromotePawnException e) {
+            assertEquals(true, e.getColour());
+            assertEquals(6, board.getPawnLocation(true));
+        }
+        Board[] newBoards = new Board[4];
+        for (int i = 0; i < 4; i++) {
+            newBoards[i] = (Board) board.clone();
+        }
+        newBoards[0].promotePawn(new int[] {6, 7}, Piece.WhiteBishop);
+        assertEquals(Piece.WhiteBishop, newBoards[0].getBoard()[6][7]);
+        newBoards[1].promotePawn(new int[] {6, 7}, Piece.WhiteKnight);
+        assertEquals(Piece.WhiteKnight, newBoards[1].getBoard()[6][7]);
+        newBoards[2].promotePawn(new int[] {6, 7}, Piece.WhiteQueen);
+        assertEquals(Piece.WhiteQueen, newBoards[2].getBoard()[6][7]);
+        newBoards[3].promotePawn(new int[] {6, 7}, Piece.WhiteRook);
+        assertEquals(Piece.WhiteRook, newBoards[3].getBoard()[6][7]);
 
     }
 
