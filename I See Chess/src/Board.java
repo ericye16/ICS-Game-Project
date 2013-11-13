@@ -204,16 +204,15 @@ public class Board implements Cloneable{
         }
     }
 
-    public void promotePawn(int[] prevLocation, Piece newPiece) throws IllegalMoveException {
+    public void promotePawn(int[] prevLocation, Piece newPiece) throws IllegalMoveException, IsNotYourTurnException {
+        /*
+        PSA: Remember that at this point, the turn is listed as the next player's turn
+         */
         Piece pieceAt = board[prevLocation[0]][prevLocation[1]];
-        if (pieceAt == null || pieceAt.isWhite() == getIsWhitesTurn() || (pieceAt != Piece.BlackPawn && pieceAt != Piece.WhitePawn)) {
-            throw new IllegalMoveException();
+        if (pieceAt == null || pieceAt.isWhite() != !getIsWhitesTurn()) {
+            throw new IsNotYourTurnException();
         }
-        System.err.println(prevLocation[0] != getPawnLocation(getIsWhitesTurn()));
-        System.err.println(prevLocation[0]);
-        System.err.println(getPawnLocation(!getIsWhitesTurn()));
-        System.err.println(prevLocation[1] != (getIsWhitesTurn()? 0 : 7));
-        if (prevLocation[0] != getPawnLocation(getIsWhitesTurn()) || prevLocation[1] != (getIsWhitesTurn()? 0 : 7)) {
+        if ((pieceAt != Piece.BlackPawn && pieceAt != Piece.WhitePawn) || prevLocation[0] != getPawnLocation(!getIsWhitesTurn()) || prevLocation[1] != (!getIsWhitesTurn()? 7 : 0)) {
             throw new IllegalMoveException();
         }
         if (newPiece.isWhite() != pieceAt.isWhite()) {
@@ -231,14 +230,14 @@ public class Board implements Cloneable{
     /**
      * Clone the object and everything within it.
      */
-    protected Object clone() {
-        Board toReturn = new Board(this.board);
-        toReturn.turn = turn;
+    protected Object clone() throws CloneNotSupportedException {
+        Board toReturn = (Board) super.clone();
+        for (int i = 0; i < 8; i++) {
+            toReturn.board[i] = board[i].clone();
+        }
         toReturn.castlingFlags = castlingFlags.clone();
         toReturn.enPassant = enPassant.clone();
         toReturn.history = (ArrayList<Board>) history.clone();
-        toReturn.isWhitesTurn = isWhitesTurn;
-        toReturn.turn = turn;
         return toReturn;
     }
 
@@ -299,7 +298,12 @@ public class Board implements Cloneable{
                 capturee = (colour ? Piece.BlackPawn : Piece.WhitePawn);
                 board[destination[0]][location[1]] = null;
             }
-            Board prevBoard = (Board) this.clone();
+            Board prevBoard = null;
+            try {
+                prevBoard = (Board) this.clone();
+            } catch (CloneNotSupportedException e) {
+                throw new InternalError(); // shouldn't happen
+            }
             prevBoard.history = null; // to remove the amount of memory required
             board[destination[0]][destination[1]] = capturerer;
             board[location[0]][location[1]] = null;
@@ -343,6 +347,7 @@ public class Board implements Cloneable{
                 }
             }
             if ((capturerer == Piece.WhitePawn || capturerer == Piece.BlackPawn) && destination[1] == (colour ? 7 : 0)) {
+
                 if (capturerer.isWhite()) {
                     whitePawnLocation = destination[0];
                 } else {
