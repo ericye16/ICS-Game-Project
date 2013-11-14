@@ -299,9 +299,23 @@ public class ISeeChessTest {
     }
 
     @Test
+    public void testPawnPromotionFail() throws Board.ChessException {
+        board.movePiece(new int[]{4, 1}, new int[]{4, 3});
+        board.movePiece(new int[]{5, 6}, new int[]{5, 4});
+        board.movePiece(new int[]{4, 3}, new int[]{5, 4}); //eat it!
+        board.movePiece(new int[]{4, 6}, new int[]{4, 5});//move the pawn out of the way for the bishop
+        board.movePiece(new int[]{5, 4}, new int[]{5, 5});
+        board.movePiece(new int[]{5, 7}, new int[]{4, 6});
+        board.movePiece(new int[]{5, 5}, new int[]{6, 6});
+        board.movePiece(new int[] {6, 7}, new int[] {7, 5});
+
+
+    }
+
+    @Test
     public void testClone() throws CloneNotSupportedException {
         Board second = (Board) board.clone();
-        assertNotSame(second.getBoard(), board.getBoard());
+        assertNotSame(second.getBoard(), board.getBoard()); // they should be equal but not the same object
     }
 
     @Ignore
