@@ -1,5 +1,6 @@
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -295,12 +296,17 @@ public class ISeeChessTest {
         assertEquals(Piece.WhiteQueen, newBoards[2].getBoard()[6][7]);
         newBoards[3].promotePawn(new int[] {6, 7}, Piece.WhiteRook);
         assertEquals(Piece.WhiteRook, newBoards[3].getBoard()[6][7]);
-
     }
 
     @Test
-    public void testClone() throws CloneNotSupportedException{
+    public void testClone() throws CloneNotSupportedException {
         Board second = (Board) board.clone();
         assertNotSame(second.getBoard(), board.getBoard());
+    }
+
+    @Ignore
+    public void testIntegerClone() {
+        Integer[] a = new Integer[] {1,2,3};
+        assertNotSame(a, a.clone());
     }
 }

@@ -232,6 +232,7 @@ public class Board implements Cloneable{
      */
     protected Object clone() throws CloneNotSupportedException {
         Board toReturn = (Board) super.clone();
+        toReturn.board = board.clone();
         for (int i = 0; i < 8; i++) {
             toReturn.board[i] = board[i].clone();
         }
