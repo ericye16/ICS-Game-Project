@@ -444,4 +444,15 @@ public class Board implements Cloneable{
             return colour;
         }
     }
+
+    public class CheckmateException extends ChessException {
+        private boolean colourOfWinner;
+        public CheckmateException(boolean colourOfWinner) {
+            this.colourOfWinner = colourOfWinner;
+        }
+
+        public boolean getColourOfWinner() {
+            return colourOfWinner;
+        }
+    }
 }
