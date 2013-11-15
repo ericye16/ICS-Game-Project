@@ -164,7 +164,7 @@ public class Board implements Cloneable{
      * Check the current conditions in terms of stalemates, checkmates, checks, etc and update the boolean flags
      * To be run after every move.
      */
-    void checkConditions() {
+    void checkConditions() throws StalemateException, CheckmateException {
         whiteStalemate = true;
         blackStalemate = true;
         if (safe(findKing(true), true)) {
@@ -201,6 +201,12 @@ public class Board implements Cloneable{
         }
         if (whiteStalemate || blackStalemate || fiftyMoves || threeBoards) {
             stalemate = true;
+        }
+        if (stalemate) {
+            throw new StalemateException();
+        }
+        if (whiteMate || blackMate) {
+            throw new CheckmateException();
         }
     }
 
@@ -279,7 +285,7 @@ public class Board implements Cloneable{
      * @throws IsNotYourTurnException if the piece moved is not the piece currently playing
      * @throws IllegalMoveException if the piece is not moved to a legal position
      */
-    Piece movePiece(int[] location, int[] destination) throws IsNotYourTurnException, IllegalMoveException, NeedToPromotePawnException {
+    Piece movePiece(int[] location, int[] destination) throws IsNotYourTurnException, IllegalMoveException, NeedToPromotePawnException, CheckmateException, StalemateException {
         Piece capturerer = board[location[0]][location[1]];
         boolean wasAValidMove = false, colour = capturerer.isWhite();
         if (colour != getIsWhitesTurn()) {
@@ -443,4 +449,8 @@ public class Board implements Cloneable{
             return colour;
         }
     }
+
+    public class StalemateException extends ChessException {}
+
+    public class CheckmateException extends ChessException {}
 }
