@@ -13,6 +13,7 @@ import java.util.Arrays;
 public class ChessPanel extends JPanel implements MouseInputListener {
     private Board board;
     private DebugPanel debugPanel;
+    private GraveyardPanel graveyardPanel;
     private Piece selectedPiece = null;
     private int[] selectedLocation = new int[2];
     private ArrayList<ColoredLocation> colouredLocations= new ArrayList<ColoredLocation>();
@@ -187,6 +188,10 @@ public class ChessPanel extends JPanel implements MouseInputListener {
         this.debugPanel = debugPanel;
     }
 
+    public void setGraveyardPanel(GraveyardPanel graveyardPanel) {
+        this.graveyardPanel = graveyardPanel;
+    }
+
     private Piece pawnPromotionChoose(boolean colour) {
         Object[] possiblePromotions;
         if (colour) {
@@ -268,6 +273,9 @@ public class ChessPanel extends JPanel implements MouseInputListener {
                     e1.printStackTrace();
                     throw new InternalError(); // should never happen
                 }
+            }
+            if (graveyardPanel != null) {
+                graveyardPanel.reCount();
             }
             selectedPiece = null;
             colouredLocations.clear();
