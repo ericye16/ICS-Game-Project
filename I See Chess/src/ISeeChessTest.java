@@ -105,13 +105,7 @@ public class ISeeChessTest {
         try {
             board.movePiece(new int[] {4,1}, new int[] {4,2});
             assertEquals(board.getBoard()[4][2], Piece.WhitePawn);
-        } catch (Board.IsNotYourTurnException e) {
-            e.printStackTrace();
-            fail();
-        } catch (Board.IllegalMoveException e) {
-            e.printStackTrace();
-            fail();
-        } catch (Board.NeedToPromotePawnException e) {
+        } catch (Board.ChessException e) {
             e.printStackTrace();
             fail();
         }
@@ -128,13 +122,7 @@ public class ISeeChessTest {
             board.movePiece(new int[] {4, 6}, new int[] {4, 4});
             assertEquals(board.getBoard()[4][4], Piece.BlackPawn);
             assertNull(board.getBoard()[4][6]);
-        } catch (Board.IsNotYourTurnException e) {
-            e.printStackTrace();
-            fail();
-        } catch (Board.IllegalMoveException e) {
-            e.printStackTrace();
-            fail();
-        } catch (Board.NeedToPromotePawnException e) {
+        } catch (Board.ChessException e) {
             e.printStackTrace();
             fail();
         }
@@ -180,12 +168,9 @@ public class ISeeChessTest {
             assertNull(board.getBoard()[3][5]); //check that nothing else has changed
             assertEquals(board.getBoard()[3][6], Piece.BlackPawn);
             //e.printStackTrace();
-        } catch (Board.IllegalMoveException e) {
+        } catch (Board.ChessException e) {
             e.printStackTrace();
             fail(); // not that kind of exception
-        } catch (Board.NeedToPromotePawnException e) {
-            e.printStackTrace();
-            fail();
         }
     }
 
@@ -203,7 +188,7 @@ public class ISeeChessTest {
         } catch (Board.IllegalMoveException e) { //should be this
             assertNull(board.getBoard()[4][2]);
             assertEquals(board.getBoard()[3][1], Piece.WhitePawn);
-        } catch (Board.NeedToPromotePawnException e) {
+        } catch (Board.ChessException e) {
             e.printStackTrace();
             fail();
         }
