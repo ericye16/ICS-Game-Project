@@ -164,7 +164,7 @@ public class Board implements Cloneable{
      * Check the current conditions in terms of stalemates, checkmates, checks, etc and update the boolean flags
      * To be run after every move.
      */
-    void checkConditions() {
+    void checkConditions() throws StalemateException, CheckmateException {
         whiteStalemate = true;
         blackStalemate = true;
         if (safe(findKing(true), true)) {
@@ -201,6 +201,12 @@ public class Board implements Cloneable{
         }
         if (whiteStalemate || blackStalemate || fiftyMoves || threeBoards) {
             stalemate = true;
+        }
+        if (stalemate) {
+            throw new StalemateException();
+        }
+        if (whiteMate || blackMate) {
+            throw new CheckmateException(whiteMate);
         }
     }
 
@@ -455,4 +461,6 @@ public class Board implements Cloneable{
             return colourOfWinner;
         }
     }
+    public class StalemateException extends ChessException {}
+
 }
