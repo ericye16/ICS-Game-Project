@@ -260,12 +260,6 @@ public class ChessPanel extends JPanel implements MouseInputListener {
             System.err.println("Selected location to move to.");
             try {
                 board.movePiece(selectedLocation, boardLoc);
-            } catch (Board.IsNotYourTurnException e) {
-                e.printStackTrace();
-                throw new InternalError(); // should never happen
-            } catch (Board.IllegalMoveException e) {
-                e.printStackTrace();
-                throw new InternalError(); // should never happen
             } catch (Board.NeedToPromotePawnException e) {
                 try {
                     board.promotePawn(boardLoc, pawnPromotionChoose(!board.getIsWhitesTurn()));
@@ -273,6 +267,10 @@ public class ChessPanel extends JPanel implements MouseInputListener {
                     e1.printStackTrace();
                     throw new InternalError(); // should never happen
                 }
+            } catch (Board.CheckmateException e) {
+                winnerDialog(e);
+            } catch (Board.ChessException e) { //the other possible exceptions
+                throw new InternalError(); //should never happen
             }
             if (graveyardPanel != null) {
                 graveyardPanel.reCount();
@@ -320,6 +318,11 @@ public class ChessPanel extends JPanel implements MouseInputListener {
         }
 
         repaint();
+    }
+
+    private void winnerDialog(Board.CheckmateException e) {
+        //TODO: Implement
+
     }
 
     /**

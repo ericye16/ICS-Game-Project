@@ -280,7 +280,7 @@ public class Board implements Cloneable{
      * @throws IsNotYourTurnException if the piece moved is not the piece currently playing
      * @throws IllegalMoveException if the piece is not moved to a legal position
      */
-    Piece movePiece(int[] location, int[] destination) throws IsNotYourTurnException, IllegalMoveException, NeedToPromotePawnException {
+    Piece movePiece(int[] location, int[] destination) throws ChessException {
         Piece capturerer = board[location[0]][location[1]];
         boolean wasAValidMove = false, colour = capturerer.isWhite();
         if (colour != getIsWhitesTurn()) {
