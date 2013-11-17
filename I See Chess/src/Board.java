@@ -1,4 +1,3 @@
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -452,13 +451,13 @@ public class Board implements Cloneable{
     }
 
     public class CheckmateException extends ChessException {
-        private boolean colourOfWinner;
-        public CheckmateException(boolean colourOfWinner) {
-            this.colourOfWinner = colourOfWinner;
+        private boolean colourOfMated;
+        public CheckmateException(boolean colourOfMated) {
+            this.colourOfMated = colourOfMated;
         }
 
-        public boolean getColourOfWinner() {
-            return colourOfWinner;
+        public boolean getColourOfMated() {
+            return colourOfMated;
         }
     }
     public class StalemateException extends ChessException {}

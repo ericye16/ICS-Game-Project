@@ -1,5 +1,3 @@
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
@@ -323,7 +321,33 @@ public class ChessPanel extends JPanel implements MouseInputListener {
     }
 
     private void winnerDialog(Board.CheckmateException e) {
-        //TODO: Implement
+        boolean winner = !e.getColourOfMated();
+        Object[] options = {"Quit",
+                    "Start Again"};
+        String titleString = (winner?"White" : "Black") + " won!";
+        String dialogString  = "Checkmate by " + (winner?"White": "Black") + "! What would you like to do now?";
+        int n = JOptionPane.showOptionDialog(
+                null,
+                dialogString,
+                titleString,
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
+        if (n == JOptionPane.CLOSED_OPTION) {
+            System.exit(-1);
+        } else if (n == 0) {
+            System.exit(0);
+        } else if (n == 1) {
+            this.board = new Board();
+            if (graveyardPanel != null) {
+                graveyardPanel.setBoard(board);
+            }
+        } else {
+            throw new InternalError(); //should never happen
+        }
     }
 
     /**

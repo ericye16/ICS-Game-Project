@@ -15,8 +15,12 @@ public class GraveyardPanel extends JPanel {
     private HashMap<Piece, Integer> theDead = new HashMap<Piece, Integer>();
 
     public GraveyardPanel(Board board) {
-        this.board = board;
+        setBoard(board);
         resetCount();
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
     }
 
     private void resetCount() {
