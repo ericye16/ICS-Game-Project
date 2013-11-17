@@ -269,7 +269,9 @@ public class ChessPanel extends JPanel implements MouseInputListener {
                 }
             } catch (Board.CheckmateException e) {
                 winnerDialog(e);
+                e.printStackTrace();
             } catch (Board.ChessException e) { //the other possible exceptions
+                e.printStackTrace();
                 throw new InternalError(); //should never happen
             }
             if (graveyardPanel != null) {
@@ -322,7 +324,6 @@ public class ChessPanel extends JPanel implements MouseInputListener {
 
     private void winnerDialog(Board.CheckmateException e) {
         //TODO: Implement
-
     }
 
     /**

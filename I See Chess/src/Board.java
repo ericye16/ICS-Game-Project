@@ -167,11 +167,11 @@ public class Board implements Cloneable{
     void checkConditions() throws StalemateException, CheckmateException {
         whiteStalemate = true;
         blackStalemate = true;
-        if (safe(findKing(true), true)) {
+        if (!safe(findKing(true), true)) {
             whiteCheck = true;
             whiteMate = true;
         }
-        if (safe(findKing(false), false)) {
+        if (!safe(findKing(false), false)) {
             blackCheck = true;
             blackMate = true;
         }
@@ -202,7 +202,7 @@ public class Board implements Cloneable{
         if (whiteStalemate || blackStalemate || fiftyMoves || threeBoards) {
             stalemate = true;
         }
-        if (stalemate) {
+        if (stalemate && !whiteMate && !blackMate) {
             throw new StalemateException();
         }
         if (whiteMate || blackMate) {
