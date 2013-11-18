@@ -15,7 +15,7 @@ public class Board implements Cloneable{
     int[] whiteKingLocation, blackKingLocation;
 
     /**
-     * Constructor for the Board, assuming no previous Board
+     * This is the default constructor for the Board. This sets the values of the board, by putting pieces in their proper default locations.
      */
     Board() {
         board = new Piece[][] {{Piece.WhiteRook, Piece.WhitePawn, null, null, null, null, Piece.BlackPawn, Piece.BlackRook},
@@ -41,18 +41,18 @@ public class Board implements Cloneable{
     }
 
     /**
-     * Constructor for the Board, assuming a previous Board exists
-     * @param currentBoard the previous Board to use
+     * Additional constructor for the Board. It accepts a board and sets the board of the class to the accepted board.
+     * @param currentBoard The accepted board that the board of this class will be set to.
      */
     Board(Piece[][] currentBoard) {
         board = currentBoard;
     }
 
     /**
-     * Find all the valid moves, given the piece and the location of all pieces around it
-     * @param piece the Piece to check
-     * @param location the location of the piece
-     * @return a 2D array of coordinates <i>relative</i> to the piece it can move
+     * This method accepts a piece and its location. It will then proceed to analyze the board and determine which squares the piece can move onto. Then return an ArrayList of valid locations relative to the piece. This method is run every time the user tries to move a piece.
+     * @param piece This is the type of piece that is being moved.
+     * @param location This is an array of length 2 representing the X and Y coordinates of the piece the user is trying to move.
+     * @return Returns an ArrayList of arrays of length 2. These array are the X and Y differences between the piece we are moving and the possible target square. These coordinates are all relative to the piece we are moving.
      */
     ArrayList<Integer[]> allValidMoves(Piece piece, int[] location) {
         if (board[location[0]][location[1]] != piece || (piece == null)) {
@@ -160,8 +160,7 @@ public class Board implements Cloneable{
     }
 
     /**
-     * Check the current conditions in terms of stalemates, checkmates, checks, etc and update the boolean flags
-     * To be run after every move.
+     * This method analyzes the board to see if any endgame conditions have occured. It checks for check, mate, and stalemate. This method is run after every move.
      */
     void checkConditions() throws StalemateException, CheckmateException {
         whiteStalemate = true;
@@ -209,6 +208,13 @@ public class Board implements Cloneable{
         }
     }
 
+    /**
+     *
+     * @param prevLocation
+     * @param newPiece
+     * @throws IllegalMoveException
+     * @throws IsNotYourTurnException
+     */
     public void promotePawn(int[] prevLocation, Piece newPiece) throws IllegalMoveException, IsNotYourTurnException {
         /*
         PSA: Remember that at this point, the turn is listed as the next player's turn
@@ -256,34 +262,39 @@ public class Board implements Cloneable{
     }
 
     /**
-     * Find the location of the king
-     * @param colour the colour of the king to find
-     * @return the location of the king
+     * Returns an array of length 2 with the coordinates of the king given my the parameter.
+     * @param colour Boolean for which king you want to find. True is white, false is black.
+     * @return Returns the location of the king, which is saved in a variable.
      */
     int[] findKing(boolean colour) {
         return colour ? whiteKingLocation : blackKingLocation;
     }
 
     /**
-     * Get the 2D Piece array
-     * @return the 2D Piece array
+     * Getter that returns the board as a 2-Dimensional array of pieces.
+     * @return Returns the board.
      */
     public Piece[][] getBoard() {
         return board;
     }
 
+    /**
+     * This is a necessary method for the column in which a promoting pawn is located. The parameter determines the colour of the variable you want.
+     * @param colour True is white and false is black.
+     * @return Returns the appropriate variable saved in this class.
+     */
     public int getPawnLocation(boolean colour) {
         return (colour ? whitePawnLocation : blackPawnLocation);
     }
 
 
     /**
-     * Move a piece from a location to a destination, doing validity- and move-checking
-     * @param location the current location of the piece
-     * @param destination the future location of the piece
-     * @return the piece moved
-     * @throws IsNotYourTurnException if the piece moved is not the piece currently playing
-     * @throws IllegalMoveException if the piece is not moved to a legal position
+     * This method is run after the move has been selected. It will undergo the procedure of actually moving the piece. It accepts the coordinates of the location from and to where the piece is moving. It returns the type of piece that is being moved so that the panel can draw it correctly. This method also is responsible for raising and lowering flags responsible for en passant and castling.
+     * @param location An array of length 2, representing the coordinates of where the piece was, prior to being moved.
+     * @param destination An array of length 2, representing where the piece will end up, after being moved.
+     * @return Returns the type of piece that was being moved.
+     * @throws IsNotYourTurnException This is an exception used for testing. It will never actually occur in a game. It occurs when the variable keeping track of who's turn it is will state that it is not the turn of the player to whom belongs the piece located on the square from which the piece is being moved.
+     * @throws IllegalMoveException This is an exception used for testing. It will never actually occur in a game. It occurs when one tries to move a piece to a location that the piece is not allowed to move to.
      */
     Piece movePiece(int[] location, int[] destination) throws ChessException {
         Piece capturerer = board[location[0]][location[1]];
@@ -370,10 +381,10 @@ public class Board implements Cloneable{
     }
 
     /**
-     * Find if a particular location is ``safe'' for a colour
-     * @param location the location to check
-     * @param colour the colour for the location
-     * @return if it is safe
+     * This method figures out whether a certain square is safe for a certain colour. Safe means that there is not a single enemy piece that can capture a piece on the square in one move.
+     * @param location An array of length 2 that represents the coordinates of the square that needs to be checked.
+     * @param colour The colour of pieces that the square is or isn't safe for. True is white and false is black.
+     * @return Returns a boolean value that is true if the square was safe for that colour.
      */
     boolean safe(int[] location, boolean colour){
         boolean isSafe = true;
@@ -418,16 +429,16 @@ public class Board implements Cloneable{
     }
 
     /**
-     * The number of plies passed
-     * @return the number of plies played in the game
+     * A getter for the current turn. Every move counts as 1 turn. So in one normal chess turn, where both players have gone once, this variable will have increased by 2.
+     * @return The turn variable.
      */
     public int getTurn() {
         return turn;
     }
 
     /**
-     * Is it White's turn
-     * @return if it's White's move
+     * A method that returns whether it is currently white's turn.
+     * @return Returns a variable keeping track of this.
      */
     public boolean getIsWhitesTurn() {
         return isWhitesTurn;
@@ -460,6 +471,6 @@ public class Board implements Cloneable{
             return colourOfMated;
         }
     }
-    public class StalemateException extends ChessException {}
 
+    public class StalemateException extends ChessException {}
 }
