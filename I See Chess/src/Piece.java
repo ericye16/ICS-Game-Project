@@ -26,8 +26,8 @@ public enum Piece {
     BufferedImage image;
 
     /**
-     * Check if the piece is white
-     * @return true if the piece is white.
+     * Method that returns if this piece is white.
+     * @return Returns a boolean that is true if the piece is white.
      */
     boolean isWhite() {
         return (this == WhitePawn || this == WhiteKnight || this == WhiteBishop ||
@@ -35,8 +35,8 @@ public enum Piece {
     }
 
     /**
-     * Check if the piece moves directly to a location; i.e. unlike a bishop or rook or queen that can move indefinitely
-     * @return whether the piece moves directly to a location
+     * This method checks if the piece moves directly to a location; i.e. unlike a bishop or rook or queen that can move "indefinitely".
+     * @return Returns a boolean that is true if the piece does move directly to a location.
      */
     boolean isDirectPiece() {
         return (this == WhitePawn || this == BlackPawn || this == WhiteKnight ||
@@ -44,8 +44,8 @@ public enum Piece {
     }
 
     /**
-     * Constructor for the Piece enum.
-     * @param imageName the name of the file to be used for the image
+     * This is the constructor for the Piece enum.
+     * @param imageName String with the name of the file to be used for the image of the piece.
      */
     Piece(String imageName) {
         try {
@@ -56,8 +56,8 @@ public enum Piece {
     }
 
     /**
-     * Get the possible moves a piece can move, knowing nothing about the board
-     * @return a 2D array of integers consisting of coordinate pairs of locations the piece can move to.
+     * This method determines all of the possible moves, in any situation, combined a certain piece relative to itself. It returns these moves as coordinates, working off of this type of piece.
+     * @return Returns an array of coordinates (arrays of length 2 of integers) consisting of coordinate pairs of locations the piece can move to relative to itself.
      */
     int[][] getPossibleMoves() {
         int[][] moves = null;

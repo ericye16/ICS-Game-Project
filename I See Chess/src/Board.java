@@ -2,7 +2,10 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Board implements Cloneable{
+/**
+ * This class holds information about everything in the current state of the game. The position on the board, whose turn it is, what positions have already occured, and the like.
+ */
+public class Board implements Cloneable {
     private Piece[][] board;
     private ArrayList<Board> history = new ArrayList<Board>();
     private boolean isWhitesTurn, whiteCheck, blackCheck, whiteStalemate, blackStalemate, fiftyMoves, threeBoards, stalemate, whiteMate, blackMate;
@@ -15,7 +18,7 @@ public class Board implements Cloneable{
     int[] whiteKingLocation, blackKingLocation;
 
     /**
-     * This is the default constructor for the Board. This sets the values of the board, by putting pieces in their proper default locations.
+     * This is the default constructor for the Board class. This sets the values of the board, by putting pieces in their proper default locations.
      */
     Board() {
         board = new Piece[][] {{Piece.WhiteRook, Piece.WhitePawn, null, null, null, null, Piece.BlackPawn, Piece.BlackRook},
