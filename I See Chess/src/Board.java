@@ -163,7 +163,7 @@ public class Board implements Cloneable {
     }
 
     /**
-     * This method analyzes the board to see if any endgame conditions have occured. It checks for check, mate, and stalemate. This method is run after every move.
+     * This method analyzes the board to see if any endgame conditions have occurred. It checks for check, mate, and stalemate. This method is run after every move.
      */
     void checkConditions() throws StalemateException, CheckmateException {
         whiteStalemate = true;
@@ -188,7 +188,7 @@ public class Board implements Cloneable {
                 }
             }
         }
-        if (history.size() >= 100) {
+        if (history.size() == 100) {
             fiftyMoves = true;
         }
         for (Board boardOne : history) {

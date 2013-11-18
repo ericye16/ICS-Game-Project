@@ -329,6 +329,29 @@ public class ISeeChessTest {
         assertNotSame(second.getBoard(), board.getBoard()); // they should be equal but not the same object
     }
 
+    @Test
+    public void stalemateThreePositions() {
+        boolean pass = false;
+        for (int i = 0; i < 3; i++) {
+            System.err.println(i);
+            try {
+                board.movePiece(new int[] {6, 0}, new int[] {5, 2});
+                board.movePiece(new int[] {6, 7}, new int[] {5, 5});
+                board.movePiece(new int[] {5, 2}, new int[] {6, 0});
+                board.movePiece(new int[] {5, 5}, new int[] {6, 7});
+            } catch (Board.StalemateException e) {
+                pass = true;
+                e.printStackTrace();
+            } catch (Board.ChessException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                fail();
+            }
+        }
+        if (!pass) {
+            fail();
+        }
+    }
+
     @Ignore
     public void testIntegerClone() {
         Integer[] a = new Integer[] {1,2,3};
