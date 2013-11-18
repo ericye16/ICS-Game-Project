@@ -1,6 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Main class for the I See Chess Project.
+ * Run this class's main() to start the program.
+ */
 public class ISeeChess {
     public static void main(String[] args){
         SwingUtilities.invokeLater(new Runnable() {

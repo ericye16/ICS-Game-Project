@@ -346,6 +346,10 @@ public class ChessPanel extends JPanel implements MouseInputListener {
 
     /**
      * Dialog box for endgame. Asks the user whether they wish to restart a new game or to quit the game entirely.
+     * Resets or quits the program as necessary.
+     * Note that currently, closing this dialog box instead of selecting either option causes the program to quit
+     * with a -1 exit code.
+     * As well, System.exit() is used, since this class cannot "see" the JFrame.
      * @param e the CheckmateException thrown at the end of the game.
      */
     private void winnerDialog(Board.CheckmateException e) {

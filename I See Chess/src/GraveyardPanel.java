@@ -5,30 +5,46 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created with IntelliJ IDEA.
- * User: eric
- * Date: 11/6/13
- * Time: 8:37 AM
+ * The GraveyardPanel is a JPanel that displays the difference between the pieces on the board and the number of pieces
+ * that should be on a normal chess board.
+ * Usually, this means that it will count the number of pieces that have been captured. However, in circumstances
+ * such as following a pawn promotion, it may count negative captured pieces, for example when three rooks of a colour
+ * are on a board.
  */
 public class GraveyardPanel extends JPanel {
     private Board board;
     private HashMap<Piece, Integer> theDead = new HashMap<Piece, Integer>();
 
+    /**
+     * Constructor for the GraveyardPanel.
+     * @param board the Board object the GraveyardPanel will count.
+     */
     public GraveyardPanel(Board board) {
         setBoard(board);
         resetCount();
     }
 
+    /**
+     * Method to manually set the GraveyardPanel's board without reconstructing it. Useful for restarting games.
+     * @param board the Board object to count.
+     */
     public void setBoard(Board board) {
         this.board = board;
     }
 
+    /**
+     * Reset the count of the pieces on the board.
+     */
     private void resetCount() {
         for (Piece piece: Piece.values()) {
             theDead.put(piece, 0);
         }
     }
 
+    /**
+     * Method to be called to "refresh" the GraveyardPanel.
+     * It recounts all the pieces on the board and also calls repaint() afterwards.
+     */
     public void reCount() {
         resetCount();
         for (Piece[] col: board.getBoard()) {
@@ -68,6 +84,10 @@ public class GraveyardPanel extends JPanel {
         repaint();
     }
 
+    /**
+     * Method to paint all the components on the GraveyardPanel. Should not be called manually.
+     * @param g the Graphics object to paint on.
+     */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -83,21 +103,30 @@ public class GraveyardPanel extends JPanel {
         }
     }
 
+    /**
+     * Get the preferred size of the GraveyardPanel (86x640). Designed to be compatible with ChessPanel but still
+     * visually appealing.
+     * @return
+     */
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(86, 640);
     }
 
+    /**
+     * Find the correct height, in pixels, of one piece drawn on the GraveyardPanel.
+     * @return the height in pixels.
+     */
     private int getDiv() {
         return getHeight() / 10;
     }
 
     /**
-     * Draw the piece and also show how many are remaining
-     * @param piece the piece to draw
-     * @param remaining the number remaining
-     * @param position the position of the piece on the graveyard (0 - 9)
-     * @param g the Graphics Object to draw on
+     * Draw the piece and also show how many are remaining.
+     * @param piece the piece to draw.
+     * @param remaining the number remaining.
+     * @param position the position of the piece on the graveyard (0 - 9).
+     * @param g the Graphics Object to draw on.
      */
     private void drawPiece(Piece piece, int remaining, int position, Graphics g) {
         g.drawImage(piece.image,
