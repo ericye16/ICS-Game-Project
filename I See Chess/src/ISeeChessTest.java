@@ -12,7 +12,7 @@ public class ISeeChessTest {
 
     @Before
     /**
-     * Create a fresh board every run
+     * Create a fresh board every run.
      */
     public void init() {
         board = new Board();
@@ -20,7 +20,8 @@ public class ISeeChessTest {
 
     @After
     /**
-     * Destroy the board after each run
+     * Destroy the board after each run.
+     * This keeps tests from interfering with each other.
      */
     public void destroy() {
         board = null;
@@ -28,7 +29,7 @@ public class ISeeChessTest {
 
     @Test
     /**
-     * Check that all pawns go where they should
+     * Check that all pawns go where they should.
      */
     public void testAllPawns() {
         for (int i = 0; i < 8; i++) {
@@ -39,7 +40,10 @@ public class ISeeChessTest {
 
 
     /**
-     * Check to see that the pawn says it can go where it can go
+     * Check to see that one pawn says it can go where it can go.
+     * @param x the x-location of the pawn in Board coordinates.
+     * @param y the y-location of the pawn in Board coordinates.
+     * @param pieceType the type of the piece to test, either a WhitePawn or a BlackPawn.
      */
     public void testPawn(int x, int y, Piece pieceType) {
         ArrayList<Integer[]> pawnPossibles = board.allValidMoves(pieceType, new int[] {x, y});
@@ -77,7 +81,7 @@ public class ISeeChessTest {
 
     @Test
     /**
-     * Test that none of the pawns have moved after checking a piece for its movability
+     * Test that none of the pawns have moved after checking a piece for its movability.
      */
     public void testPawnConsistency() {
         Board second = new Board();
@@ -99,7 +103,7 @@ public class ISeeChessTest {
 
     @Test
     /**
-     * Test that white can move on first turn
+     * Test that white can move on first turn.
      */
     public void testWhiteFirstMove() {
         try {
@@ -113,7 +117,7 @@ public class ISeeChessTest {
 
     @Test
     /**
-     * Test that black can move on second turn
+     * Test that black can move on second turn.
      */
     public void testBlackSecondMove() {
         try {
@@ -130,7 +134,7 @@ public class ISeeChessTest {
 
     @Test
     /**
-     * Test that black cant move whereever
+     * Test that black can't move into unexpected places.
      */
     public void testBlackFail() throws Board.ChessException {
         try {
@@ -142,6 +146,9 @@ public class ISeeChessTest {
         }
     }
 
+    /**
+     * Test that pieces can be captured as expected.
+     */
     @Test
     public void nomTest() {
         try {
@@ -158,7 +165,7 @@ public class ISeeChessTest {
 
     @Test
     /**
-     * Test that black can't move on first turn
+     * Test that black can't move on first turn.
      */
     public void testBlackFirstMove() {
         try {
@@ -176,7 +183,7 @@ public class ISeeChessTest {
 
     @Test
     /**
-     * Test that white can't move to an illegal position on first turn
+     * Test that white can't move to an illegal position on first turn.
      */
     public void testWhiteFirstIllegalMove() {
         try {
@@ -195,9 +202,12 @@ public class ISeeChessTest {
     }
 
     @Test
+    /**
+     * Test that safe() does not modify the board in any way.
+     */
     public void testSafe () {
         Board second = new Board();
-        //please note that allValidMoves _should not_ modify the board in any way
+        //please note that safe() _should not_ modify the board in any way
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 board.safe(new int[] {i, j}, true);
@@ -212,6 +222,9 @@ public class ISeeChessTest {
     }
 
     @Test
+    /**
+     * Check that the second move a pawn does only has one possibility (one square ahead) instead of two.
+     */
     public void testSecondPawnMove() throws Board.ChessException {
         board.movePiece(new int[] {4, 1}, new int[] {4, 2}); // white pawn forward one move
         board.movePiece(new int[] {5, 6}, new int[] {5, 5}); //black pawn forward one
@@ -221,6 +234,9 @@ public class ISeeChessTest {
     }
 
     @Test
+    /**
+     * Test whether the isIn() function in ChessPanel works as expected.
+     */
     public void testIsIn() {
         ArrayList<Integer[]> testAgainst = new ArrayList<Integer[]>();
         testAgainst.add(new Integer[]{1, 2});
@@ -232,6 +248,9 @@ public class ISeeChessTest {
     }
 
     @Test
+    /**
+     * Test whether the board can detect when the white king is in check.
+     */
     public void testWhiteKingCheck() throws Board.ChessException {
         board.movePiece(new int[] {5, 1}, new int[] {5, 2});
         board.movePiece(new int[] {4, 6}, new int[] {4, 5});
@@ -253,6 +272,9 @@ public class ISeeChessTest {
     }
 
     @Test
+    /**
+     * Test whether the board detects that the pawn should be promoted.
+     */
     public void testPawnPromotion() throws Board.ChessException, CloneNotSupportedException {
         board.movePiece(new int[]{4, 1}, new int[]{4, 3});
         board.movePiece(new int[]{5, 6}, new int[]{5, 4});
@@ -284,6 +306,9 @@ public class ISeeChessTest {
     }
 
     @Test
+    /**
+     * Test whether the board detects that the pawn shouldn't be promoted.
+     */
     public void testPawnPromotionFail() throws Board.ChessException {
         board.movePiece(new int[]{4, 1}, new int[]{4, 3});
         board.movePiece(new int[]{5, 6}, new int[]{5, 4});
@@ -293,11 +318,12 @@ public class ISeeChessTest {
         board.movePiece(new int[]{5, 7}, new int[]{4, 6});
         board.movePiece(new int[]{5, 5}, new int[]{6, 6});
         board.movePiece(new int[] {6, 7}, new int[] {7, 5});
-
-
     }
 
     @Test
+    /**
+     * Test whether the clone() method works in Board class.
+     */
     public void testClone() throws CloneNotSupportedException {
         Board second = (Board) board.clone();
         assertNotSame(second.getBoard(), board.getBoard()); // they should be equal but not the same object
