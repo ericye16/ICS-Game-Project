@@ -69,10 +69,10 @@ public class ChessPanel extends JPanel implements MouseInputListener {
     private void drawBackground(Graphics g) {
         for (int r = 0; r < 8; r++) {
             for (int c = 0 ; c < 8; c++) {
-                if ((r + c) % 2 == 0) { // evens are white
-                    g.setColor(Color.WHITE);
+                if ((r + c) % 2 == 0) { // evens are whitish
+                    g.setColor(Color.LIGHT_GRAY);
                 } else {
-                    g.setColor(Color.BLACK);
+                    g.setColor(Color.DARK_GRAY);
                 }
                 g.fillRect(r * differenceX(), c * differenceY(), differenceX(), differenceY());
             }

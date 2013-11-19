@@ -94,7 +94,7 @@ public class GraveyardPanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         setOpaque(true);
-        setBackground(Color.darkGray);
+        setBackground(Color.GRAY);
         //ensure that order is what you want it to be
         Piece[] pieces = new Piece[]
                 {Piece.BlackQueen, Piece.BlackRook, Piece.BlackKnight, Piece.BlackBishop, Piece.BlackPawn,
