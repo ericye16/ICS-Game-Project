@@ -7,10 +7,16 @@ import java.util.Arrays;
 
 /**
  * The ChessPanel, used to display the chess board and all the pieces. Also includes the necessary MouseInputListener.
- * Note that in this file, multiple coordinate systems are used. Panel coordinates begin at the top left of the screen
+ * Note that in this file, multiple coordinate systems are used.
+ *
+ * Panel coordinates begin at the top left of the screen
  * in (x, y) format whereas Board coordinates begin at the bottom left of the screen, also in (x, y) format.
  * The methods convertPanelToBoard() and convertBoardToPanel() should be used to convert coordinates
  * in one system to another.
+ *
+ * See the Board class documentation for more information.
+ *
+ * The ChessPanel is also responsible for launching dialog boxes for pawn promotion, checkmate and stalemate.
  */
 public class ChessPanel extends JPanel implements MouseInputListener {
     private Board board;
@@ -292,7 +298,11 @@ public class ChessPanel extends JPanel implements MouseInputListener {
             } catch (Board.CheckmateException e) {
                 winnerDialog(e);
                 e.printStackTrace();
-            } catch (Board.ChessException e) { //the other possible exceptions
+            } catch (Board.StalemateException e) {
+                stalemateDialog(e);
+                e.printStackTrace();
+            }
+            catch (Board.ChessException e) { //the other possible exceptions
                 e.printStackTrace();
                 throw new InternalError(); //should never happen
             }
@@ -345,6 +355,35 @@ public class ChessPanel extends JPanel implements MouseInputListener {
     }
 
     /**
+     * Dialog to indicate a stalemate has occurred. Similar to winnerDialog in its options and behaviour.
+     * @param e The StalemateException.
+     */
+    private void stalemateDialog(Board.StalemateException e) {
+        String titleString = "Stalemate!";
+        String dialogString = "A Stalemate has occurred! What would you like to do?";
+        String[] options = {"Start a new game", "Quit game"};
+        int choice = JOptionPane.showOptionDialog(
+                null,
+                dialogString,
+                titleString,
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
+        if (choice == JOptionPane.CLOSED_OPTION) {
+            System.exit(-1);
+        } else if (choice == 1) {
+            System.exit(0);
+        } else if (choice == 0) {
+            resetBoard();
+        } else {
+            throw new InternalError(); //this should never happen
+        }
+    }
+
+    /**
      * Dialog box for endgame. Asks the user whether they wish to restart a new game or to quit the game entirely.
      * Resets or quits the program as necessary.
      * Note that currently, closing this dialog box instead of selecting either option causes the program to quit
@@ -373,15 +412,22 @@ public class ChessPanel extends JPanel implements MouseInputListener {
         } else if (n == 0) {
             System.exit(0);
         } else if (n == 1) {
-            this.board = new Board();
-            if (graveyardPanel != null) {
-                graveyardPanel.setBoard(board);
-            }
+            resetBoard();
         } else {
             throw new InternalError(); //should never happen
         }
     }
 
+    /**
+     * Reset the Board object to its initial conditions, and also reset the GraveyardPanel if it exists.
+     * Used following a Checkmate or a Stalemate and the user wants to restart the game.
+     */
+    private void resetBoard() {
+        this.board = new Board();
+        if (graveyardPanel != null) {
+            graveyardPanel.setBoard(board);
+        }
+    }
     /**
      * Not Used. Ignore.
      * @param mouseEvent

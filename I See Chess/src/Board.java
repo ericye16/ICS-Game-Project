@@ -3,7 +3,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * This class holds information about everything in the current state of the game. The position on the board, whose turn it is, what positions have already occured, and the like.
+ * This class holds information about everything in the current state of the game.
+ * The position on the board, whose turn it is, what positions have already occurred, and the like.
+ *
+ * All chess game logic occurs through the Board class and its member methods.
+ * In order to move a piece, movePiece() should be called and its exceptions checked.
+ * ChessExceptions should be checked and handled as necessary.
+ * Following a movePiece() call, checkConditions() must also be called in order to update
+ * the boards check and stalemate flags.
+ *
+ * The Board's coordinate system is in (x, y), where x indicates the horizontal location of the square,
+ * starting from the left. y indicates the vertical location of the square, starting from the bottom, i.e. the white side.
+ * Note that this is different from the coordinate system of ChessPanel.
  */
 public class Board implements Cloneable {
     private Piece[][] board;
