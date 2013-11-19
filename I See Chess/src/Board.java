@@ -212,11 +212,12 @@ public class Board implements Cloneable {
     }
 
     /**
-     *
-     * @param prevLocation
-     * @param newPiece
-     * @throws IllegalMoveException
-     * @throws IsNotYourTurnException
+     * Method to perform pawn promotion. The method also validates the promotion and will throw exceptions
+     * as necessary if the promotion does not validate.
+     * @param prevLocation The current location of the pawn to be promoted.
+     * @param newPiece The Piece to promote the pawn into.
+     * @throws IllegalMoveException If the pawn being promoted does not exist or otherwise should not be promoted.
+     * @throws IsNotYourTurnException If the pawn being promoted is the wrong colour or is being promoted into the wrong colour.
      */
     public void promotePawn(int[] prevLocation, Piece newPiece) throws IllegalMoveException, IsNotYourTurnException {
         /*
@@ -258,7 +259,11 @@ public class Board implements Cloneable {
 
     @Override
     /**
-     * Check if two boards have pieces at the same spot
+     * Check equality between two Board objects.
+     * Note that this only checks whether the pieces are in the same locations and disregards history, which
+     * means that stalemate or castling may not be identical in both boards.
+     * @param other The other Board object
+     * @return true if the objects are equal.
      */
     public boolean equals(Object other) {
         return other instanceof Board && Arrays.deepEquals(board, ((Board) other).board);
@@ -447,33 +452,73 @@ public class Board implements Cloneable {
         return isWhitesTurn;
     }
 
+    /**
+     * A ChessException is any chess game-related exception.
+     */
     public class ChessException extends Throwable {}
 
+    /**
+     * An IsNotYourTurnException is thrown whenever a move is made for the wrong colour, e.g. if it is White's turn
+     * but Black is moved.
+     */
     public class IsNotYourTurnException extends ChessException {}
 
+    /**
+     * An IllegalMoveException is thrown whenever a move is illegal, for example moving a pawn three squares forward.
+     */
     public class IllegalMoveException extends ChessException {}
 
+    /**
+     * A NeedToPromotePawnException does not indicate an error, but rather is used to signal the containing
+     * ChessPanel that a promotion needs to occur.
+     */
     public class NeedToPromotePawnException extends ChessException {
         private boolean colour;
+
+        /**
+         * Constructor for the NeedToPromotePawnException.
+         * @param colour The colour of the pawn that needs to be promoted.
+         */
         public NeedToPromotePawnException(boolean colour) {
             this.colour = colour;
         }
 
+        /**
+         * Get the colour of the pawn that needs to be promoted.
+         * @return The colour of the pawn to be promoted.
+         */
         public boolean getColour() {
             return colour;
         }
     }
 
+    /**
+     * A CheckmateException does not indicate an error, but rather is used to signal to the containing ChessPanel
+     * that a checkmate has occurred and needs to be handled.
+     */
     public class CheckmateException extends ChessException {
         private boolean colourOfMated;
+
+        /**
+         * Constructor for the CheckmateException. Sets the colour of the <i>mated</i> player.
+         * @param colourOfMated The colour of the mated player.
+         */
         public CheckmateException(boolean colourOfMated) {
             this.colourOfMated = colourOfMated;
         }
 
+        /**
+         * Get the colour of the mated player.
+         * @return The colour of the mated player.
+         */
         public boolean getColourOfMated() {
             return colourOfMated;
         }
     }
 
+    /**
+     * A Stalemate Exception does not indicate an error, but rather is used to signal the containing ChessPanel
+     * that a stalemate has occurred.
+     */
     public class StalemateException extends ChessException {}
 }
