@@ -199,7 +199,7 @@ public class Board implements Cloneable {
                 }
             }
         }
-        if (history.size() == 100) {
+        if (history.size() > 100) {
             fiftyMoves = true;
         }
         for (Board boardOne : history) {
@@ -343,6 +343,9 @@ public class Board implements Cloneable {
             prevBoard.history = null; // to remove the amount of memory required
             board[destination[0]][destination[1]] = capturerer;
             board[location[0]][location[1]] = null;
+            if (capturerer == Piece.WhitePawn || capturerer == Piece.BlackPawn || capturee != null) {
+                history = new ArrayList<Board>();
+            }
             history.add(prevBoard);
             isWhitesTurn = !isWhitesTurn;
             turn++;
@@ -392,7 +395,6 @@ public class Board implements Cloneable {
                 throw new NeedToPromotePawnException(capturerer.isWhite());
             }
             checkConditions();
-            //throw new NotImplementedException();
             return capturee;
         } else {
             throw new IllegalMoveException();

@@ -330,15 +330,40 @@ public class ISeeChessTest {
     }
 
     @Test
-    public void stalemateThreePositions() {
+    public void stalemate() {
         boolean pass = false;
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 26; i++) {
             System.err.println(i);
             try {
                 board.movePiece(new int[] {6, 0}, new int[] {5, 2});
                 board.movePiece(new int[] {6, 7}, new int[] {5, 5});
                 board.movePiece(new int[] {5, 2}, new int[] {6, 0});
                 board.movePiece(new int[] {5, 5}, new int[] {6, 7});
+            } catch (Board.StalemateException e) {
+                pass = true;
+                e.printStackTrace();
+            } catch (Board.ChessException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                fail();
+            }
+        }
+        if (!pass) {
+            fail();
+        }
+    }
+
+    @Test
+    public void stalemate2() {
+        Board emptyBoard = new Board(new Piece[][] {{Piece.WhiteKing, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, Piece.BlackKing}});
+        board = emptyBoard;
+        boolean pass = false;
+        for (int i = 0; i < 26; i++) {
+            System.err.println(i);
+            try {
+                board.movePiece(new int[] {7, 7}, new int[] {6, 6});
+                board.movePiece(new int[] {0, 0}, new int[] {1, 1});
+                board.movePiece(new int[] {6, 6}, new int[] {7, 7});
+                board.movePiece(new int[] {1, 1}, new int[] {0, 0});
             } catch (Board.StalemateException e) {
                 pass = true;
                 e.printStackTrace();
