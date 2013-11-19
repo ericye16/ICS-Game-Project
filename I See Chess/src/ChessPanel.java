@@ -296,10 +296,14 @@ public class ChessPanel extends JPanel implements MouseInputListener {
                     throw new InternalError(); // should never happen
                 }
             } catch (Board.CheckmateException e) {
+                colouredLocations.clear();
+                nextLegalMoves.clear();
                 repaint();
                 winnerDialog(e);
                 e.printStackTrace();
             } catch (Board.StalemateException e) {
+                colouredLocations.clear();
+                nextLegalMoves.clear();
                 repaint();
                 stalemateDialog(e);
                 e.printStackTrace();
