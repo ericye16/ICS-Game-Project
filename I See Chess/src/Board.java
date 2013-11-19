@@ -59,6 +59,7 @@ public class Board implements Cloneable {
      * @param currentBoard The accepted board that the board of this class will be set to.
      */
     Board(Piece[][] currentBoard) {
+        this();
         board = currentBoard;
     }
 
