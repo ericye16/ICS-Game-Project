@@ -10,6 +10,8 @@ import java.util.Map;
  * Usually, this means that it will count the number of pieces that have been captured. However, in circumstances
  * such as following a pawn promotion, it may count negative captured pieces, for example when three rooks of a colour
  * are on a board.
+ *
+ * Enable this panel by setting the usingGraveyardPanel variable to true in ISeeChess.java.
  */
 public class GraveyardPanel extends JPanel {
     private Board board;

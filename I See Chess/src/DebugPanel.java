@@ -4,6 +4,7 @@ import java.awt.*;
 /**
  * A Panel to help debug ChessPanel.
  * Shows where the mouse cursor is, as well as which pieces are selected and have last been clicked on.
+ * Enable this panel by setting the usingDebugPanel variable to true in ISeeChess.java.
  */
 public class DebugPanel extends JPanel {
 

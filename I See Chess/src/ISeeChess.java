@@ -6,6 +6,10 @@ import java.awt.*;
  * Run this class's main() to start the program.
  */
 public class ISeeChess {
+
+    private static final boolean useGraveyardPanel = true;
+    private static final boolean useDebugPanel = false;
+
     public static void main(String[] args){
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -16,8 +20,6 @@ public class ISeeChess {
     }
 
     private static void createAndShowGUI() {
-        boolean useGraveyardPanel = true;
-        boolean useDebugPanel = false;
         GraveyardPanel graveyardPanel = null;
         JFrame frame = new JFrame("I See Chess");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
